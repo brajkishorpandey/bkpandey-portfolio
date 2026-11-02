@@ -1,0 +1,51 @@
+ServerSignature Off
+Options -Indexes -ExecCGI -Includes
+DirectoryIndex disabled
+ErrorDocument 404 /404.html
+<IfModule mod_rewrite.c>
+ RewriteEngine On
+ # The rule path is decoded by Apache; this also rejects percent-encoded script suffixes.
+ RewriteCond %{ENV:REDIRECT_STATUS} ^$
+ RewriteRule \.(?:php[0-9]*|phtml|phar|cgi|pl|shtml)(?:/|$) - [R=404,END,NC]
+ RewriteRule ^(?:uploads|storage|bkpandey-private)(?:/|$) - [R=404,END,NC]
+ RewriteRule ^$ index.php [END]
+ RewriteRule ^admin/?$ blog/admin.php [END]
+ RewriteRule ^admin/setup/?$ blog/owner-setup.php [END]
+ RewriteRule ^api/site-settings/?$ media/settings.php [END]
+ RewriteRule ^api/media/([1-9][0-9]*)/view$ blog/file.php?id=$1&inline=1 [END]
+ RewriteRule ^api/media/([1-9][0-9]*)/download$ blog/file.php?id=$1 [END]
+ RewriteRule ^media/profile/?$ media/profile.php [END]
+ RewriteRule ^resume/download/?$ download/resume.php [END]
+ RewriteRule ^resume(?:\.html)?$ media/resume-page.php [END]
+ RewriteRule ^blog/?$ blog/index.php [END]
+ RewriteRule ^blog/([a-z0-9]+(?:-[a-z0-9]+)*)\.html$ blog/index.php?post=$1 [END]
+ RewriteRule ^assets/(?:images/)?braj-portrait\.webp$ media/profile.php [END]
+ RewriteRule ^assets/(?:documents/)?Brajkishor_Pandey_Resume\.pdf$ download/resume.php [END]
+ RewriteRule ^assets/blog/(.+\.pdf)$ assets/documents/blog/$1 [L]
+ RewriteRule ^assets/blog/(.+\.webp)$ assets/images/blog/$1 [L]
+ RewriteRule (^|/)\.(?!well-known(?:/|$)) - [F,L]
+</IfModule>
+<FilesMatch "(?i)(?:\.(?:env|ini|sql|log|bak|old|zip|tar|gz)|error_log|adminer\.php|composer\.(?:json|lock)|package(?:-lock)?\.json)$">
+ Require all denied
+</FilesMatch>
+AddType text/javascript .mjs
+<IfModule mod_headers.c>
+ Header always unset X-Powered-By
+ Header always set X-Content-Type-Options "nosniff"
+ Header always set Referrer-Policy "strict-origin-when-cross-origin"
+ Header always set X-Frame-Options "SAMEORIGIN"
+ Header always set Strict-Transport-Security "max-age=31536000"
+ Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+ Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+ <FilesMatch "\.(?:pdf|webp|png|jpg|jpeg|mjs)$">
+  Header set Cache-Control "public, max-age=86400"
+ </FilesMatch>
+</IfModule>
+<IfModule mod_expires.c>
+ ExpiresActive On
+ ExpiresByType text/css "access plus 1 day"
+ ExpiresByType application/javascript "access plus 1 day"
+ ExpiresByType text/javascript "access plus 1 day"
+ ExpiresByType image/webp "access plus 1 day"
+ ExpiresByType font/ttf "access plus 1 month"
+</IfModule>

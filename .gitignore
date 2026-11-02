@@ -1,0 +1,11 @@
+
+# Hosting-only private runtime state
+hosting/bkpandey-private/database.php
+hosting/bkpandey-private/setup-attempts.json
+hosting/bkpandey-private/uploads/
+
+hosting/bkpandey-private/cache/
+__pycache__/
+*.pyc
+
+node_modules/

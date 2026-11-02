@@ -1,0 +1,209 @@
+{
+  "imported_at": "2026-11-02",
+  "coverage": "Publicly retrievable posts and owner-provided carousel files; not a verified complete LinkedIn history.",
+  "posts": [
+    {
+      "slug": "payout-routing-total-cost",
+      "title": "Your cheapest payout partner may be your most expensive route.",
+      "source_url": null,
+      "attachment": "Brajkishor_Pandey_Payout_Routing_Carousel.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "webhook-security-business-state",
+      "title": "Valid signature. Wrong payment state.",
+      "source_url": null,
+      "attachment": "Brajkishor_Pandey_Webhook_Security_Carousel.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "payment-approval-version",
+      "title": "Approved for A. Paid to B.",
+      "source_url": null,
+      "attachment": "Brajkishor_Pandey_Payment_Approval_Security_Carousel.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "safe-payout-failover",
+      "title": "One customer. Two payouts. One avoidable loss.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_one-customer-two-payouts-one-avoidable-activity-7510672822567038976-Z2SN",
+      "attachment": "Brajkishor_Pandey_Safe_Payout_Failover_LinkedIn_Carousel.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "partner-onboarding-first-payment",
+      "title": "Your API works. Can a partner use it?",
+      "source_url": null,
+      "attachment": "Brajkishor_Pandey_Partner_Onboarding_LinkedIn_Carousel.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "complete-fintech-operating-platform",
+      "title": "Your payment works. Can the business run on it?",
+      "source_url": null,
+      "attachment": "Brajkishor_Pandey_Fintech_Platform_Architecture_Carousel.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "cross-border-payment-system",
+      "title": "Build a payment system, not only a transfer screen.",
+      "source_url": null,
+      "attachment": "Cross_Border_Payments_Architecture_LinkedIn_Carousel.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "smart-contract-settlement-controller",
+      "title": "Smart contracts as settlement controllers.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_smart-contract-in-fintech-activity-7503056028725587968-zDMm",
+      "attachment": "Smart_Contracts_in_Fintech_Architecture_Carousel.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "compliance-decision-layer",
+      "title": "Compliance belongs inside the payment lifecycle.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_compliance-should-run-before-the-payment-activity-7495467549090983937-I4Za",
+      "attachment": "technology_enabled_compliance_cross_border_payments.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "double-entry-money-truth",
+      "title": "A transaction status is not the money truth.",
+      "source_url": null,
+      "attachment": "double_entry_ledger_cross_border_payments_linkedin.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "transaction-control-layer",
+      "title": "Every fintech needs a transaction control layer.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_fintech-payments-crossborderpayments-activity-7467822240928067584-ktpY",
+      "attachment": "Transaction_Control_Layer_LinkedIn_Carousel.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "failed-payment-visibility",
+      "title": "A failed transaction should never be a black box.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_a-failed-transaction-should-never-be-black-activity-7458121533102645249-6NAm",
+      "attachment": "FinTech_Failed_Transaction_Visibility_Carousel.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "ai-powered-kyc",
+      "title": "KYC is more than an ID upload.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_ai-powered-kyc-architecture-for-cross-border-activity-7483144624287416320-MRLQ",
+      "attachment": "AI_Powered_KYC_LinkedIn_Carousel_Brajkishor_Pandey.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "conversation-based-remittance",
+      "title": "Language should not be a barrier to remittance.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_language-should-never-be-a-barrier-in-remittance-activity-7474794278242668544-13Hm",
+      "attachment": "Conversation_Based_Remittance_Natural_Carousel_Handdrawn_With_Language_Page.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "multiple-payment-rails",
+      "title": "One payment rail is not enough as complexity grows.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_one-payment-rail-is-not-enough-anymore-activity-7476262342549204992-SgAA",
+      "attachment": "Cross_Border_Payments_New_Phase_Carousel_Compressed.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "control-before-scale",
+      "title": "Build control before scaling the volume.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_fintech-is-no-longer-just-about-payment-activity-7451831464477765632-yy2a",
+      "attachment": "FinTech_Control_Before_Scale_Carousel_Final_Clean.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "reliability-builds-trust",
+      "title": "In fintech, reliability builds trust.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_in-fintech-reliability-beats-hype-activity-7457766966716420096-PuDX",
+      "attachment": "Fintech_Trust_Carousel_6_Pages_Small.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "fintech-platform-specialist-support",
+      "title": "Where specialist fintech engineering helps.",
+      "source_url": null,
+      "attachment": "Brajkishor_Pandey_FinTech_Platform_Lead_Generation_Carousel.pdf",
+      "origin": "Technical carousel"
+    },
+    {
+      "slug": "remittance-ready-to-spend",
+      "title": "What if a remittance arrived ready to spend?",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_cross-border-money-ready-to-spend-activity-7492910037175099392-ulkd",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "agentic-payment-authority",
+      "title": "An AI agent needs payment authority, not just a tool.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_fintech-agenticai-agenticpayments-activity-7503754423454679041-gtBF",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "forecast-remittance-demand",
+      "title": "Forecast demand before liquidity becomes the bottleneck.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_ai-fintech-remittance-activity-7401417749262168064-946a",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "generative-ai-fraud-investigation",
+      "title": "Use AI to improve the fraud investigation workflow.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_frauddetection-fintech-crossborderpayments-activity-7376950398873636864-tgRx",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "stablecoin-infrastructure",
+      "title": "The stablecoin opportunity is also in the plumbing.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_the-real-stablecoin-play-is-in-the-plumbing-activity-7469768326420811776-h0s-",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "reusable-payment-connectivity",
+      "title": "Reuse the architecture behind the next corridor.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_crossborderpayments-fintech-instantpayments-activity-7511023030513602560-5_tz",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "future-fintech-2023",
+      "title": "Fintech directions: a look back at my 2023 article.",
+      "source_url": "https://www.linkedin.com/pulse/future-fintech-industries-brajkishor-pandey",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "transaction-fraud-signals",
+      "title": "Fraud monitoring starts with connected signals.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_fintech-frauddetection-antimoneylaundering-activity-7400360134406918144-QY5X",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "ai-driven-cross-border-2025",
+      "title": "AI in cross-border payments: the operational opportunity.",
+      "source_url": "https://www.linkedin.com/pulse/future-cross-border-payments-ai-driven-brajkishor-pandey-fi15c",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "high-traffic-php-mysql",
+      "title": "High-traffic PHP APIs: start with the workload.",
+      "source_url": "https://www.linkedin.com/pulse/opise-code-high-traffic-website-brajkishor-pandey",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "fast-secure-reconcilable-payments",
+      "title": "Fast, secure, and reconcilable belong together.",
+      "source_url": "https://www.linkedin.com/posts/brajkishorpandey_how-can-cross-border-payments-be-fast-secure-activity-7482404072524763137-Z5bK",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    }
+  ]
+}

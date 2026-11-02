@@ -1,0 +1,67 @@
+name: Validate and deploy portfolio
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: portfolio-production
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.5'
+          extensions: pdo_mysql, pdo_sqlite, fileinfo
+          coverage: none
+          tools: none
+      - name: Validate PHP and behavior
+        run: |
+          find hosting -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+          php tests/blog.php
+      - name: Build and verify release
+        run: |
+          npm ci --ignore-scripts --omit=optional --no-audit --no-fund
+          python3 scripts/prepare_assets.py
+          python3 build.py
+          python3 blog_build.py
+          node --check dist/assets/js/site.js
+          node --check dist/assets/js/blog.js
+          node --check dist/assets/js/media.js
+          python3 scripts/verify_release.py
+          python3 -m unittest discover -s tests -p 'test_*.py'
+  deploy:
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    environment:
+      name: production
+      url: https://bkpandey.com
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Build release
+        run: |
+          npm ci --ignore-scripts --omit=optional --no-audit --no-fund
+          python3 scripts/prepare_assets.py
+          python3 build.py
+          python3 blog_build.py
+          python3 scripts/verify_release.py
+      - name: Deploy changed files over verified FTPS
+        env:
+          FTPS_HOST: ${{ secrets.FTPS_HOST }}
+          FTPS_USERNAME: ${{ secrets.FTPS_USERNAME }}
+          FTPS_PASSWORD: ${{ secrets.FTPS_PASSWORD }}
+          FTPS_ROOT: ${{ secrets.FTPS_ROOT }}
+          RELEASE_ID: ${{ github.sha }}
+        run: python3 scripts/deploy_ftps.py

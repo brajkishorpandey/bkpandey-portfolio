@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "pdfjs-dist": "6.5.438"
+  },
+  "name": "bkpandey-portfolio",
+  "private": true
+}

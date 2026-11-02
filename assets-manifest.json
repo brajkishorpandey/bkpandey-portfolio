@@ -1,0 +1,232 @@
+{
+  "assets": [
+    {
+      "path": "dist/assets/documents/blog/AI_Powered_KYC_LinkedIn_Carousel_Brajkishor_Pandey.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/AI_Powered_KYC_LinkedIn_Carousel_Brajkishor_Pandey.pdf",
+      "sha256": "8cd648a4a18603f7d13c3630483ab5c04d618006485e3b67b0a9c649448254b7",
+      "size": 22219389
+    },
+    {
+      "path": "dist/assets/documents/blog/Brajkishor_Pandey_FinTech_Platform_Lead_Generation_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Brajkishor_Pandey_FinTech_Platform_Lead_Generation_Carousel.pdf",
+      "sha256": "80954e39f03031291ff9f3c274ce119abeb11be2bc9acd12107476ed86c4036a",
+      "size": 57125
+    },
+    {
+      "path": "dist/assets/documents/blog/Brajkishor_Pandey_Fintech_Platform_Architecture_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Brajkishor_Pandey_Fintech_Platform_Architecture_Carousel.pdf",
+      "sha256": "7f96b97fdca08a7788f7026f8c5438ad4be5f3d002f85a36c545636346d72649",
+      "size": 108084
+    },
+    {
+      "path": "dist/assets/documents/blog/Brajkishor_Pandey_Partner_Onboarding_LinkedIn_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Brajkishor_Pandey_Partner_Onboarding_LinkedIn_Carousel.pdf",
+      "sha256": "36ea9e117bc73fe2652bf6dbc3e1bd6be8f676a241b14b2ba41223e2866de369",
+      "size": 79148
+    },
+    {
+      "path": "dist/assets/documents/blog/Brajkishor_Pandey_Payment_Approval_Security_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Brajkishor_Pandey_Payment_Approval_Security_Carousel.pdf",
+      "sha256": "aaa78468bfda5eac03e8e3be0b99b75d57961aaa8a273d194d9ac0a8e77ff233",
+      "size": 102201
+    },
+    {
+      "path": "dist/assets/documents/blog/Brajkishor_Pandey_Payout_Routing_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Brajkishor_Pandey_Payout_Routing_Carousel.pdf",
+      "sha256": "76cbde9ba8a213fc57f20d92143c1255eb3db3b4085ad001b05f13bc895d23de",
+      "size": 81135
+    },
+    {
+      "path": "dist/assets/documents/blog/Brajkishor_Pandey_Safe_Payout_Failover_LinkedIn_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Brajkishor_Pandey_Safe_Payout_Failover_LinkedIn_Carousel.pdf",
+      "sha256": "0565874f34e78126a6cdcbc0547e76d85bd251e4f680016ec747ba41dbd6b7c2",
+      "size": 99170
+    },
+    {
+      "path": "dist/assets/documents/blog/Brajkishor_Pandey_Webhook_Security_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Brajkishor_Pandey_Webhook_Security_Carousel.pdf",
+      "sha256": "7d68d89ad8cf92cf0363f3d14add1437b88e3322dc1c0b258ac9ad5e9117b4b0",
+      "size": 104744
+    },
+    {
+      "path": "dist/assets/documents/blog/Conversation_Based_Remittance_Natural_Carousel_Handdrawn_With_Language_Page.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Conversation_Based_Remittance_Natural_Carousel_Handdrawn_With_Language_Page.pdf",
+      "sha256": "c03ec5a911f30d5050f95bb87c667135704ba25c847dc4c5d6bba413b366c453",
+      "size": 6429679
+    },
+    {
+      "path": "dist/assets/documents/blog/Cross_Border_Payments_Architecture_LinkedIn_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Cross_Border_Payments_Architecture_LinkedIn_Carousel.pdf",
+      "sha256": "0048556c5a78cf8345b96c351fe5a260fd41b7bca67b407b70f360d809e4b8e4",
+      "size": 312906
+    },
+    {
+      "path": "dist/assets/documents/blog/Cross_Border_Payments_New_Phase_Carousel_Compressed.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Cross_Border_Payments_New_Phase_Carousel_Compressed.pdf",
+      "sha256": "ebacc9f180c227e2ad27dc399e9e200903af58f28ea19bf98af2a06fa3327bc6",
+      "size": 5382929
+    },
+    {
+      "path": "dist/assets/documents/blog/FinTech_Control_Before_Scale_Carousel_Final_Clean.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/FinTech_Control_Before_Scale_Carousel_Final_Clean.pdf",
+      "sha256": "d9063bc08592120e00c77e2e9ee52b81ebf95fb61b970251cc3e2cee2484e641",
+      "size": 115953
+    },
+    {
+      "path": "dist/assets/documents/blog/FinTech_Failed_Transaction_Visibility_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/FinTech_Failed_Transaction_Visibility_Carousel.pdf",
+      "sha256": "4f1cb21ae9efb1d25e8ebc5a877321b91b4120583b45283072f58166df40a79a",
+      "size": 1550303
+    },
+    {
+      "path": "dist/assets/documents/blog/Fintech_Trust_Carousel_6_Pages_Small.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Fintech_Trust_Carousel_6_Pages_Small.pdf",
+      "sha256": "8d7e37f605fd1e4a6e2930b3d2c631fe51270b74ecb0e9c1a12ff85c0f1fa90a",
+      "size": 4988077
+    },
+    {
+      "path": "dist/assets/documents/blog/Smart_Contracts_in_Fintech_Architecture_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Smart_Contracts_in_Fintech_Architecture_Carousel.pdf",
+      "sha256": "9895dcb5bbf8922e96d37485abda19fb28923c8acc9505eca372154fba6ccbcd",
+      "size": 421299
+    },
+    {
+      "path": "dist/assets/documents/blog/Transaction_Control_Layer_LinkedIn_Carousel.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/Transaction_Control_Layer_LinkedIn_Carousel.pdf",
+      "sha256": "969d0b9974a83724acc3bd84387dd140c6b6dea64d9f25adf8f581d126fadb5f",
+      "size": 43175
+    },
+    {
+      "path": "dist/assets/documents/blog/double_entry_ledger_cross_border_payments_linkedin.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/double_entry_ledger_cross_border_payments_linkedin.pdf",
+      "sha256": "5b6a2592cbfa2c67f539453c836c5f305d07f59b1f3693ff0471542cda6e8257",
+      "size": 109320
+    },
+    {
+      "path": "dist/assets/documents/blog/technology_enabled_compliance_cross_border_payments.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/technology_enabled_compliance_cross_border_payments.pdf",
+      "sha256": "b21b36b5c18aaf9fdb90f6633ea2f92bf4372293094df574ada67681a7958bb6",
+      "size": 117566
+    },
+    {
+      "path": "dist/assets/fonts/manrope.woff2",
+      "url": "https://bkpandey.com/assets/fonts/manrope.woff2",
+      "sha256": "8c2def024c1bf31aacf3624ae3c4d701269b4ec3dc765c04830839f0d36b2d9e",
+      "size": 24532
+    },
+    {
+      "path": "dist/assets/images/blog/AI_Powered_KYC_LinkedIn_Carousel_Brajkishor_Pandey.webp",
+      "url": "https://bkpandey.com/assets/images/blog/AI_Powered_KYC_LinkedIn_Carousel_Brajkishor_Pandey.webp",
+      "sha256": "16e09995f583f2507230ef95ba059c5f67bce108023cf0b88b6094a87a7003e1",
+      "size": 49096
+    },
+    {
+      "path": "dist/assets/images/blog/Brajkishor_Pandey_FinTech_Platform_Lead_Generation_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Brajkishor_Pandey_FinTech_Platform_Lead_Generation_Carousel.webp",
+      "sha256": "9878cd934711032f80d4541d887bc604f9e4c3a12d4fddcf3e53e9725858e445",
+      "size": 28454
+    },
+    {
+      "path": "dist/assets/images/blog/Brajkishor_Pandey_Fintech_Platform_Architecture_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Brajkishor_Pandey_Fintech_Platform_Architecture_Carousel.webp",
+      "sha256": "e6c89018961eb41dcfbaec0941fb3cc03b1c727dbb0bc821e87c49352f1212d6",
+      "size": 32516
+    },
+    {
+      "path": "dist/assets/images/blog/Brajkishor_Pandey_Partner_Onboarding_LinkedIn_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Brajkishor_Pandey_Partner_Onboarding_LinkedIn_Carousel.webp",
+      "sha256": "28fdcd3abcb6761db0080995f4f02de5acfc14ed928be27d6c8ce1d9cc887a61",
+      "size": 20938
+    },
+    {
+      "path": "dist/assets/images/blog/Brajkishor_Pandey_Payment_Approval_Security_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Brajkishor_Pandey_Payment_Approval_Security_Carousel.webp",
+      "sha256": "d623bd2d9955d6662b073be315495a494b567804a8c3d811be450168cfe76334",
+      "size": 29616
+    },
+    {
+      "path": "dist/assets/images/blog/Brajkishor_Pandey_Payout_Routing_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Brajkishor_Pandey_Payout_Routing_Carousel.webp",
+      "sha256": "7a070d3d56e201952bf70ff079205080a80ff13e3454fb504f3174de66dff675",
+      "size": 29290
+    },
+    {
+      "path": "dist/assets/images/blog/Brajkishor_Pandey_Safe_Payout_Failover_LinkedIn_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Brajkishor_Pandey_Safe_Payout_Failover_LinkedIn_Carousel.webp",
+      "sha256": "c3f663b6d210c85366280ce520744da315291fdd459cb445c014075323ea8904",
+      "size": 23810
+    },
+    {
+      "path": "dist/assets/images/blog/Brajkishor_Pandey_Webhook_Security_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Brajkishor_Pandey_Webhook_Security_Carousel.webp",
+      "sha256": "6341af04426401e11136c1d84f6696d00640966743f6a589d34805aa331c5198",
+      "size": 28238
+    },
+    {
+      "path": "dist/assets/images/blog/Conversation_Based_Remittance_Natural_Carousel_Handdrawn_With_Language_Page.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Conversation_Based_Remittance_Natural_Carousel_Handdrawn_With_Language_Page.webp",
+      "sha256": "ed5f07e533b15826351775ed263990c525685a87bde4524df4dd7c3263fec841",
+      "size": 88934
+    },
+    {
+      "path": "dist/assets/images/blog/Cross_Border_Payments_Architecture_LinkedIn_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Cross_Border_Payments_Architecture_LinkedIn_Carousel.webp",
+      "sha256": "8f0e58f5a20a96031de0d472ccc5f37e064058d4ca8dde3b784048709a22b67e",
+      "size": 24196
+    },
+    {
+      "path": "dist/assets/images/blog/Cross_Border_Payments_New_Phase_Carousel_Compressed.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Cross_Border_Payments_New_Phase_Carousel_Compressed.webp",
+      "sha256": "fe825e4b049172a887ea3eb0402e5461bc5863af424dc5df55abe55a98b614de",
+      "size": 62266
+    },
+    {
+      "path": "dist/assets/images/blog/FinTech_Control_Before_Scale_Carousel_Final_Clean.webp",
+      "url": "https://bkpandey.com/assets/images/blog/FinTech_Control_Before_Scale_Carousel_Final_Clean.webp",
+      "sha256": "50a056ed28e681633cfaedd093fd102dac3972b2da7d2889e7ee70a222f61f7e",
+      "size": 36754
+    },
+    {
+      "path": "dist/assets/images/blog/FinTech_Failed_Transaction_Visibility_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/FinTech_Failed_Transaction_Visibility_Carousel.webp",
+      "sha256": "9239e1da1b61e8910bd0f01632f7b1a17e92de185e7390bef0b8d00dabdc3dc1",
+      "size": 55292
+    },
+    {
+      "path": "dist/assets/images/blog/Fintech_Trust_Carousel_6_Pages_Small.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Fintech_Trust_Carousel_6_Pages_Small.webp",
+      "sha256": "7624a87c0b77f8851b91c8f54d6a16541a0fc14c0248f92d4890679397ede657",
+      "size": 62170
+    },
+    {
+      "path": "dist/assets/images/blog/Smart_Contracts_in_Fintech_Architecture_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Smart_Contracts_in_Fintech_Architecture_Carousel.webp",
+      "sha256": "b6aa9d81d56800c9ca51d0b89c1a6b7a97da3bbf02cefecca4d5b11a496af94e",
+      "size": 15664
+    },
+    {
+      "path": "dist/assets/images/blog/Transaction_Control_Layer_LinkedIn_Carousel.webp",
+      "url": "https://bkpandey.com/assets/images/blog/Transaction_Control_Layer_LinkedIn_Carousel.webp",
+      "sha256": "65d7f8f6cb7cd20c57d74a05b13b372f989b4762b19be63e64e7553abbe3f35a",
+      "size": 25390
+    },
+    {
+      "path": "dist/assets/images/blog/double_entry_ledger_cross_border_payments_linkedin.webp",
+      "url": "https://bkpandey.com/assets/images/blog/double_entry_ledger_cross_border_payments_linkedin.webp",
+      "sha256": "17414be382290021da586dc6cba7ccff9d843e71c7724119ac21b79d8a46d6dc",
+      "size": 20662
+    },
+    {
+      "path": "dist/assets/images/blog/technology_enabled_compliance_cross_border_payments.webp",
+      "url": "https://bkpandey.com/assets/images/blog/technology_enabled_compliance_cross_border_payments.webp",
+      "sha256": "b21250c5b28d8f6294de4a3f90bdcfb08c110afe8e220fc443fdc01b27fc582c",
+      "size": 27040
+    },
+    {
+      "path": "dist/assets/images/social-card.png",
+      "url": "https://bkpandey.com/assets/images/social-card.png",
+      "sha256": "c34bb33ff7de0d0e45f207a1c1be7762622ce6e470d356ce6683c0258f3348e3",
+      "size": 205497
+    }
+  ]
+}
