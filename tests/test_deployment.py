@@ -15,4 +15,9 @@ class ReleaseSafety(unittest.TestCase):
    for name in ['dist/.htaccess','hosting/public_html/.htaccess']:
     path=root/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(name)
    self.assertEqual(deploy.release_files(root)['public_html/.htaccess'].read_text(),'hosting/public_html/.htaccess')
+ def test_split_scoped_destinations(self):
+  public=object();private=object()
+  self.assertEqual(deploy.remote_target('public_html/index.php',public,private),(public,'index.php'))
+  self.assertEqual(deploy.remote_target('bkpandey-private/core.php',public,private),(private,'core.php'))
+  with self.assertRaises(ValueError):deploy.remote_target('public_html/../database.php',public,private)
 if __name__=='__main__':unittest.main()

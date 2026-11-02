@@ -34,20 +34,42 @@ def upload_bytes(ftp,remote,data,private=False):
     ftp.sendcmd('SITE CHMOD '+('0600 ' if private else '0644 ')+temp)
     ftp.rename(temp,remote)
 
-def deploy():
+def open_ftps(host,user,password,root):
+    context=ssl.create_default_context();context.minimum_version=ssl.TLSVersion.TLSv1_2
+    ftp=FTP_TLS(context=context,timeout=60)
+    ftp.connect(host,21);ftp.login(user,password);ftp.prot_p();ftp.set_pasv(True);ftp.cwd(root or '/')
+    return ftp
+
+def deployment_connections():
     host=os.environ.get('FTPS_HOST','');user=os.environ.get('FTPS_USERNAME','');password=os.environ.get('FTPS_PASSWORD','')
     if not all([host,user,password]):raise ValueError('Configure FTPS_HOST, FTPS_USERNAME, and FTPS_PASSWORD as production environment secrets.')
     if '/' in host or ':' in host or any(c.isspace() for c in host):raise ValueError('FTPS_HOST must be a hostname without protocol or port.')
-    context=ssl.create_default_context();context.minimum_version=ssl.TLSVersion.TLSv1_2
-    ftp=FTP_TLS(context=context,timeout=60)
-    ftp.connect(host,21);ftp.login(user,password);ftp.prot_p();ftp.set_pasv(True)
-    remote_root=os.environ.get('FTPS_ROOT','').strip() or '/';ftp.cwd(remote_root)
-    # The account must reach both sibling directories; do not nest application code in public_html.
-    names={str(PurePosixPath(n).name) for n in ftp.nlst()}
-    if not {'public_html','bkpandey-private'}.issubset(names):raise ValueError('FTPS_ROOT must contain public_html and bkpandey-private. Use an appropriately scoped deployment account.')
+    root=os.environ.get('FTPS_ROOT','').strip() or '/'
+    public=open_ftps(host,user,password,root)
+    names={str(PurePosixPath(n).name) for n in public.nlst()}
+    if {'public_html','bkpandey-private'}.issubset(names):
+        # Compatibility with an account-home deployment login.
+        public.cwd('public_html');private=open_ftps(host,user,password,root);private.cwd('bkpandey-private')
+    else:
+        # Recommended: independent logins scoped to each application folder.
+        private_user=os.environ.get('FTPS_PRIVATE_USERNAME','');private_password=os.environ.get('FTPS_PRIVATE_PASSWORD','')
+        if not all([private_user,private_password]):
+            public.quit();raise ValueError('The public-folder FTP login also needs FTPS_PRIVATE_USERNAME and FTPS_PRIVATE_PASSWORD for the private backend folder.')
+        private=open_ftps(host,private_user,private_password,os.environ.get('FTPS_PRIVATE_ROOT','').strip() or '/')
+        private_names={str(PurePosixPath(n).name) for n in private.nlst()}
+        if not {'core.php','controllers'}.issubset(private_names):raise ValueError('The private FTP root must be the existing bkpandey-private application directory.')
+    return public,private
+
+def remote_target(path,public,private):
+    prefix,relative=path.split('/',1)
+    if prefix not in {'public_html','bkpandey-private'} or not relative or '..' in PurePosixPath(relative).parts:raise ValueError('Invalid release destination.')
+    return (private if prefix=='bkpandey-private' else public),relative
+
+def deploy():
+    public,private=deployment_connections()
     previous={}
     try:
-        chunks=[];ftp.retrbinary('RETR bkpandey-private/deploy-state.json',chunks.append);previous=json.loads(b''.join(chunks)).get('files',{})
+        chunks=[];private.retrbinary('RETR deploy-state.json',chunks.append);previous=json.loads(b''.join(chunks)).get('files',{})
     except error_perm as e:
         if not str(e).startswith('550'):raise
     files=release_files();state={};changed=[]
@@ -56,22 +78,18 @@ def deploy():
         if previous.get(remote)!=digest:changed.append((remote,path))
     release=os.environ.get('RELEASE_ID','manual')
     if not all(c.isalnum() or c in '-_' for c in release):raise ValueError('Invalid release identifier.')
-    # Application code first; public entrypoints last. Existing private runtime files are never touched.
     changed.sort(key=lambda item:(0 if item[0].startswith('bkpandey-private/') else 3 if item[1].name=='.htaccess' else 2 if item[1].suffix=='.php' else 1,item[0]))
     for remote,path in changed:
-        private=remote.startswith('bkpandey-private/')
-        # Preserve the previous version of every changed file for rollback.
+        client,target=remote_target(remote,public,private);is_private=client is private
         chunks=[]
-        try:
-            ftp.retrbinary('RETR '+remote,chunks.append)
+        try:client.retrbinary('RETR '+target,chunks.append)
         except error_perm as e:
             if not str(e).startswith('550'):raise
-        else:
-            upload_bytes(ftp,'bkpandey-private/releases/'+release+'/'+remote,b''.join(chunks),True)
-        upload_bytes(ftp,remote,path.read_bytes(),private)
-    upload_bytes(ftp,'bkpandey-private/cache/generation',uuid.uuid4().hex.encode(),True)
-    upload_bytes(ftp,'bkpandey-private/deploy-state.json',json.dumps({'release':release,'files':state},sort_keys=True).encode(),True)
-    ftp.quit();print(f'Deployed {len(changed)} changed files. Runtime data preserved; previous files retained for rollback.')
+        else:upload_bytes(private,'releases/'+release+'/'+remote,b''.join(chunks),True)
+        upload_bytes(client,target,path.read_bytes(),is_private)
+    upload_bytes(private,'cache/generation',uuid.uuid4().hex.encode(),True)
+    upload_bytes(private,'deploy-state.json',json.dumps({'release':release,'files':state},sort_keys=True).encode(),True)
+    public.quit();private.quit();print(f'Deployed {len(changed)} changed files. Runtime data preserved; previous files retained for rollback.')
 if __name__=='__main__':
     try:deploy()
     except Exception as error:

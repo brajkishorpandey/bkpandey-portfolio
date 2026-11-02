@@ -63,5 +63,8 @@ jobs:
           FTPS_USERNAME: ${{ secrets.FTPS_USERNAME }}
           FTPS_PASSWORD: ${{ secrets.FTPS_PASSWORD }}
           FTPS_ROOT: ${{ secrets.FTPS_ROOT }}
+          FTPS_PRIVATE_USERNAME: ${{ secrets.FTPS_PRIVATE_USERNAME }}
+          FTPS_PRIVATE_PASSWORD: ${{ secrets.FTPS_PRIVATE_PASSWORD }}
+          FTPS_PRIVATE_ROOT: ${{ secrets.FTPS_PRIVATE_ROOT }}
           RELEASE_ID: ${{ github.sha }}
         run: python3 scripts/deploy_ftps.py
