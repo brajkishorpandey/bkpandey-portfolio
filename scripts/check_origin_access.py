@@ -39,7 +39,11 @@ if __name__=='__main__':
         addresses=sorted({item[4][0] for item in socket.getaddrinfo(HOST,443,type=socket.SOCK_STREAM)})
         print(json.dumps({'dns':[{'address':address,'cloudflare':any(ipaddress.ip_address(address) in network for network in networks)} for address in addresses]}))
     except OSError:print(json.dumps({'dns_error':True}))
+    failures=[]
     for variant,path in [('connection-peer','/'+args.probe+'/index.html'),('child-authorization','/'+args.probe+'/child/check.html'),('sensitive-file','/'+args.probe+'/blocked.txt'),('baseline','/'+args.probe+'-baseline/check.html')]:
-        print(json.dumps({'variant':variant,'route':'public',**check(path)}))
-        print(json.dumps({'variant':variant,'route':'direct-origin',**check(path,args.origin)}))
-        print(json.dumps({'variant':variant,'route':'direct-origin-forged-headers',**check(path,args.origin,{'CF-Connecting-IP':'173.245.48.1','X-Forwarded-For':'173.245.48.1','X-Real-IP':'173.245.48.1','Proxy-Remote-Addr':'173.245.48.1'})}))
+        for route,origin,headers in [('public',None,None),('direct-origin',args.origin,None),('direct-origin-forged-headers',args.origin,{'CF-Connecting-IP':'173.245.48.1','X-Forwarded-For':'173.245.48.1','X-Real-IP':'173.245.48.1','Proxy-Remote-Addr':'173.245.48.1'})]:
+            result=check(path,origin,headers)
+            expected=403 if variant=='sensitive-file' or (variant!='baseline' and route!='public') else 200
+            print(json.dumps({'variant':variant,'route':route,'expected':expected,**result}))
+            if result.get('status')!=expected:failures.append(variant+':'+route)
+    if failures:raise SystemExit('Origin access checks failed: '+', '.join(failures))

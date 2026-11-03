@@ -109,6 +109,7 @@ class ApacheOriginGate(unittest.TestCase):
 
     def tearDown(self):
         (self.public/'.htaccess').write_text(GATE)
+        (self.public/'child'/'.htaccess').write_text('Require all granted\nRewriteEngine On\nRewriteRule ^ - [L]\n')
 
     def request(self,path='/probe.txt',headers=None,host='127.0.0.1'):
         connection=http.client.HTTPConnection(host,self.port,timeout=5)
@@ -146,7 +147,9 @@ class ApacheOriginGate(unittest.TestCase):
 
     def test_native_gate_is_not_overridden_by_child_directory_grant(self):
         (self.public/'.htaccess').write_text(LS_GATE)
+        (self.public/'child'/'.htaccess').write_text(LS_GATE+'Require all granted\nRewriteEngine On\nRewriteRule ^ - [L]\n')
         self.assertEqual(self.request('/child/probe.txt'),403)
+        self.assertEqual(self.request('/child/probe.txt',headers={'X-Origin-Test-Peer':'173.245.48.1','CF-Connecting-IP':'198.51.100.17'}),200)
 
     def test_native_gate_preserves_sensitive_file_denial(self):
         (self.public/'.htaccess').write_text(LS_GATE+'\n<Files "private.txt">\nRequire all denied\n</Files>\n')
