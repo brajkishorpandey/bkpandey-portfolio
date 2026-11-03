@@ -3,7 +3,7 @@ declare(strict_types=1);
 $private=getenv('BP_PRIVATE_DIR') ?: dirname(__DIR__);
 $public=dirname($private).'/public_html';
 if(!is_file($private.'/core.php')){http_response_code(503);exit('Publishing service is being configured.');}
-require $private.'/core.php';bp_security_headers(true);
+require $private.'/core.php';require $private.'/migration-runner.php';bp_security_headers(true);
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==='off'){http_response_code(426);exit('Use HTTPS to access the publishing area.');}
 bp_session();$error='';$notice='';
 if(!bp_configured()){
@@ -50,6 +50,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $_SESSION['notice']=$uploadErrors?'Text saved. Upload: '.implode(' ',$uploadErrors):'Website updated. The public cache has been refreshed.';
             header('Location: /admin?site=1',true,303);exit;
         }
+        if($action==='migrate'){$applied=bp_migrate($db);bp_cache_invalidate();$notice=count($applied).' database migrations applied.';}
         if($action==='cache'){bp_cache_invalidate();$notice='Public cache refreshed.';}
         if($action==='category'){
             $name=trim((string)($_POST['category_name']??''));if(strlen($name)<2 || strlen($name)>80)throw new InvalidArgumentException('Category must be 2-80 characters.');
@@ -66,13 +67,14 @@ if(!bp_admin()){
     echo '<input type="hidden" name="action" value="login"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><div class="field"><label for="admin-email">Email</label><input id="admin-email" type="email" name="email" required autocomplete="username" maxlength="254"></div><div class="field"><label for="admin-password">Password</label><input id="admin-password" type="password" name="password" required autocomplete="current-password" maxlength="512"></div><button class="btn btn-primary" type="submit">Sign in ↗</button></form></main>';bp_page_end();exit;
 }
 $notice=$notice?:($_SESSION['notice']??'');unset($_SESSION['notice']);
-echo '<main id="main" class="container admin-shell"><p class="eyebrow">Publishing / Your blog</p><h1 style="margin-top:20px">Ideas worth sharing.</h1><div class="admin-toolbar"><a class="btn btn-primary" href="/admin?new=1">New article +</a><a class="btn" href="/admin">All articles</a><a class="btn" href="/admin?site=1">Website & résumé</a><a class="btn" href="/admin?account=1">Account & password</a><a class="btn" href="/blog/" target="_blank" rel="noopener">View blog ↗</a><form method="post"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><button class="btn" name="action" value="logout">Sign out</button></form></div>';
+echo '<main id="main" class="container admin-shell"><p class="eyebrow">Publishing / Your blog</p><h1 style="margin-top:20px">Ideas worth sharing.</h1><div class="admin-toolbar"><a class="btn btn-primary" href="/admin?new=1">New article +</a><a class="btn" href="/admin">All articles</a><a class="btn" href="/admin?site=1">Website & résumé</a><a class="btn" href="/admin?account=1">Account & password</a><a class="btn" href="/admin?database=1">Database</a><a class="btn" href="/blog/" target="_blank" rel="noopener">View blog ↗</a><form method="post"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><button class="btn" name="action" value="logout">Sign out</button></form></div>';
 if($error)echo '<p class="admin-notice admin-error">'.bp_h($error).'</p>';if($notice)echo '<p class="admin-notice" role="status">'.bp_h($notice).'</p>';
 $edit=isset($_GET['edit'])?(int)$_GET['edit']:0;$post=null;
 if($edit){$q=$db->prepare('SELECT * FROM bp_blog_posts WHERE id=?');$q->execute([$edit]);$post=$q->fetch();}
 if(isset($_GET['account'])){
     echo '<form method="post" class="admin-editor"><h2>Change your password.</h2><p>Changing the password signs out existing sessions.</p><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><input type="hidden" name="action" value="password"><div class="field"><label for="current-password">Current password</label><input id="current-password" name="current_password" type="password" autocomplete="current-password" required></div><div class="field"><label for="new-password">New password — at least 14 characters</label><input id="new-password" name="new_password" type="password" autocomplete="new-password" minlength="14" maxlength="512" required></div><div class="field"><label for="confirm-password">Confirm new password</label><input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" minlength="14" maxlength="512" required></div><button type="submit" class="btn btn-primary">Change password</button></form>';
 }
+elseif(isset($_GET['database'])){require $private.'/database-editor.php';}
 elseif(isset($_GET['site'])){require $private.'/site-editor.php';}
 elseif(isset($_GET['new']) || $post){
     $p=$post?:['id'=>'','version'=>'','title'=>'','slug'=>'','excerpt'=>'','body'=>'','category_id'=>'','status'=>'draft','source_url'=>'','pdf_display'=>'carousel','slider_interval'=>6];

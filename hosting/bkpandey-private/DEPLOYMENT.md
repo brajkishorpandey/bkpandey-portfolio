@@ -30,13 +30,20 @@ modify unrelated tables.
 
 After uploading, open `/admin/setup` over HTTPS. Authenticate the existing
 MySQL account through the password form. The installer initializes the seven application
-tables, imports missing articles, and stores the runtime connection in
+tables through a versioned migration, imports missing articles, and stores the runtime connection in
 `bkpandey-private/database.php` with owner-only permissions. This runtime file
 stays outside the document root and is never part of the source or download.
 
 After database authentication, create a separate owner password for publishing.
 The setup page removes itself once the owner account exists. The database form
 is rate-limited and guarded by a secure session and CSRF token.
+
+Later releases can add immutable numbered migration files. Back up the database,
+then use **Admin → Database → Apply pending migrations**, or run the private
+`migrate.php status` / `migrate.php up` commands. Applied checksums are verified;
+changed, missing, or interrupted migrations require operator review. MySQL DDL
+is not automatically rolled back. The FTPS pipeline uploads migrations but
+does not run schema updates from public HTTP requests. See `DATABASE.md`.
 
 ## Alternative: private environment
 

@@ -118,4 +118,10 @@ parameter handling, HTML escaping, URL and slug validation, CSRF, login limits,
 password verification, and attachment checks. Live MySQL and hosting behavior
 require verification after deployment on the intended PHP/MySQL host.
 
+Versioned migrations support fresh installs and adoption of the existing seven
+tables. Checksums, database locking, and recorded failure progress guard updates.
+The owner can apply pending trusted migrations through **Admin → Database**;
+there is also a private CLI. GitHub Actions tests the runner against SQLite and
+a MySQL 8.4 service. See `DATABASE.md` for activation and backup procedures.
+
 Public app endpoints use clean routes (`/admin`, `/admin/setup`, `/api/site-settings`, `/api/media/ID/view`, `/media/profile`, and `/resume/download`). Direct script-suffix requests return 404. This reduces technology exposure; it does not make the server technology impossible to identify.

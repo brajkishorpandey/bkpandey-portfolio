@@ -4,8 +4,8 @@ The included `.github/workflows/deploy.yml` is ready for a GitHub repository.
 It is not active until the repository, production environment, and its secrets
 are configured. There is no deployment credential in the code or archive.
 
-1. Create a private repository in the owner's personal GitHub account and push
-   this source with `main` as the default branch.
+1. Source and workflow are in `brajkishorpandey/bkpandey-portfolio`, with `main`
+   as the deployment branch.
 2. In GitHub, create the `production` environment and restrict it to `main`.
    A required reviewer is optional if you prefer approval before a release.
 3. Add separate production environment secrets:
@@ -35,6 +35,9 @@ Rollback: retrieve the changed files from
 `bkpandey-private/releases/COMMIT_SHA/` through cPanel and restore them to their
 original relative paths. Database content and owner uploads are preserved;
 this workflow does not run destructive schema migrations or delete remote data.
+Database updates are versioned separately. After backing up MySQL, apply them
+through the authenticated **Admin → Database** screen or the private CLI.
+See `DATABASE.md` for setup, checksums, locking, and interrupted-run handling.
 
 Public app endpoints use clean routes (`/admin`, `/admin/setup`, `/api/site-settings`, `/api/media/ID/view`, `/media/profile`, and `/resume/download`). Direct script-suffix requests return 404. This reduces technology exposure; it does not make the server technology impossible to identify.
 

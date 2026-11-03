@@ -3,7 +3,7 @@ declare(strict_types=1);
 $private=getenv('BP_PRIVATE_DIR') ?: dirname(__DIR__);
 $public=dirname($private).'/public_html';
 if(!is_file($private.'/core.php')){http_response_code(503);exit('Publishing files are not yet available.');}
-require $private.'/core.php';require $private.'/seed-import.php';
+require $private.'/core.php';require $private.'/seed-import.php';require $private.'/migration-runner.php';
 bp_security_headers(true);
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==='off'){http_response_code(426);exit('Use HTTPS for database setup.');}
 bp_session();
@@ -26,7 +26,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             try{
                 $db=new PDO('mysql:host=localhost;dbname=bkpandey_braj;charset=utf8mb4','bkpandey_braj',$password,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,PDO::ATTR_EMULATE_PREPARES=>false]);
             }catch(PDOException $e){$code=(int)($e->errorInfo[1]??0);throw new RuntimeException(in_array($code,[1044,1045],true)?'Database access was rejected. Use the database-user password, which may differ from the cPanel password.':'The database connection is unavailable. Check the database host and hosting service.');}
-            foreach(explode(';',file_get_contents($private.'/schema.sql')) as $sql)if(trim($sql)!=='')$db->exec($sql);
+            bp_migrate($db);
             bp_import_initial_articles($db);bp_cache_invalidate();
             $settings=['db_host'=>'localhost','db_name'=>'bkpandey_braj','db_user'=>'bkpandey_braj','db_password'=>$password];
             $temp=$private.'/database-'.bin2hex(random_bytes(8)).'.tmp';

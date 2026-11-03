@@ -13,6 +13,20 @@ jobs:
   validate:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci-test-only-password
+          MYSQL_DATABASE: portfolio_test
+          MYSQL_ROOT_HOST: '%'
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -27,6 +41,7 @@ jobs:
         run: |
           find hosting -type f -name '*.php' -print0 | xargs -0 -n1 php -l
           php tests/blog.php
+          BP_TEST_MYSQL=1 php tests/migrations.php
       - name: Build and verify release
         run: |
           npm ci --ignore-scripts --omit=optional --no-audit --no-fund

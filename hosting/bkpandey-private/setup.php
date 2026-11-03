@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 if(PHP_SAPI!=='cli'){http_response_code(404);exit;}
-require __DIR__.'/core.php';
+require __DIR__.'/core.php';require __DIR__.'/migration-runner.php';
 try{
     $db=bp_db();
-    foreach(explode(';',file_get_contents(__DIR__.'/schema.sql')) as $sql){if(trim($sql)!=='')$db->exec($sql);}
+    bp_migrate($db);
     $email=strtolower(trim(getenv('BP_ADMIN_EMAIL')?:''));$password=getenv('BP_ADMIN_PASSWORD')?:'';
     if(!filter_var($email,FILTER_VALIDATE_EMAIL) || strlen($password)<14)throw new RuntimeException('Set BP_ADMIN_EMAIL and a BP_ADMIN_PASSWORD of at least 14 characters.');
     $db->beginTransaction();
