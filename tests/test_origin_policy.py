@@ -175,4 +175,11 @@ class ApacheOriginGate(unittest.TestCase):
         (self.public/'.htaccess').write_text(LS_GATE)
         self.assertEqual(self.request(headers={'CF-Connecting-IP':'198.51.100.17','X-Origin-Test-Peer':'2606:4700::1'}),200)
 
+    def test_https_redirect_runs_after_origin_denial(self):
+        source=(ROOT/'hosting/public_html/.htaccess').read_text()
+        redirect=source.split('# BEGIN HTTPS redirect',1)[1].split('# END HTTPS redirect',1)[0]
+        (self.public/'.htaccess').write_text(LS_GATE+redirect)
+        self.assertEqual(self.request(),403)
+        self.assertEqual(self.request(headers={'X-Origin-Test-Peer':'173.245.48.1','X-Forwarded-Proto':'http'}),308)
+
 if __name__=='__main__':unittest.main()

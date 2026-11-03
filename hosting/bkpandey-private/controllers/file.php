@@ -15,4 +15,8 @@ try{
     $file=$private.'/uploads/'.$asset['storage_key'];if(!is_file($file)){http_response_code(404);exit;}
     if(!in_array($asset['mime_type'],['application/pdf','image/jpeg','image/png','image/webp'],true)){http_response_code(404);exit;}
     bp_serve_file($file,$asset['mime_type'],$asset['original_name'],isset($_GET['inline']),$public);
-}catch(Throwable $e){error_log('Portfolio attachment unavailable.');http_response_code(503);}
+}catch(Throwable $e){
+    // Keep diagnostics private and omit exception text, queries, identifiers, and credentials.
+    error_log('Portfolio attachment unavailable ['.get_class($e).':'.(int)$e->getCode().' '.basename($e->getFile()).':'.$e->getLine().'].');
+    http_response_code(503);
+}
