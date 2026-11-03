@@ -41,6 +41,15 @@ $db->exec("UPDATE bp_blog_posts SET title='Owner edited this' WHERE slug='payout
 bp_import_initial_articles($db);
 verify($db->query("SELECT title FROM bp_blog_posts WHERE slug='payout-routing-total-cost'")->fetchColumn()==='Owner edited this','Import preserves edited articles');
 $db->exec('CREATE TABLE bp_site_settings(setting_key TEXT PRIMARY KEY,setting_value TEXT,updated_at TEXT)');
+verify(bp_public_asset($db,2147483647)===null,'Unknown media ID remains absent');
+verify(bp_public_asset($db,1)!==null,'Published article attachment is public');
+$db->exec("INSERT INTO bp_blog_assets(id,original_name,mime_type) VALUES (999,'private-fixture.pdf','application/pdf')");
+$q=$db->prepare('INSERT INTO bp_blog_post_assets(post_id,asset_id,is_cover) VALUES (?,999,0)');$q->execute([$id]);
+verify(bp_public_asset($db,999)===null,'Archived article attachment stays private');
+bp_set_site_value($db,'resume_asset','999');
+verify((int)bp_public_asset($db,999)['id']===999,'Explicit website resume is publicly readable');
+$db->exec("DELETE FROM bp_site_settings WHERE setting_key='resume_asset'");
+verify(bp_public_asset($db,999)===null,'Removing a public website alias revokes access');
 verify(bp_byte_range('bytes=0-99',1000)===[0,99],'Bounded byte range');
 verify(bp_byte_range('bytes=-50',1000)===[950,999],'Suffix byte range');
 verify(bp_byte_range('bytes=900-',1000)===[900,999],'Open byte range');

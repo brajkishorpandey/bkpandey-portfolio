@@ -97,6 +97,12 @@ function bp_post(PDO $db,string $slug,bool $public=true): ?array {
 function bp_assets(PDO $db,int $post): array {
     $q=$db->prepare('SELECT a.*,pa.is_cover,pa.sort_order FROM bp_blog_assets a JOIN bp_blog_post_assets pa ON pa.asset_id=a.id WHERE pa.post_id=? ORDER BY pa.sort_order,a.id');$q->execute([$post]);return $q->fetchAll();
 }
+function bp_public_asset(PDO $db,int $id): ?array {
+    // Bind the setting value as data. Comparing two derived string columns can
+    // otherwise fail when the connection and table use different collations.
+    $q=$db->prepare("SELECT a.* FROM bp_blog_assets a WHERE a.id=? AND (EXISTS(SELECT 1 FROM bp_blog_post_assets pa JOIN bp_blog_posts p ON p.id=pa.post_id WHERE pa.asset_id=a.id AND p.status='published') OR EXISTS(SELECT 1 FROM bp_site_settings s WHERE s.setting_key IN ('profile_asset','resume_asset') AND s.setting_value=?))");
+    $q->execute([$id,(string)$id]);return $q->fetch()?:null;
+}
 function bp_asset_url(array $asset,bool $inline=false): string {
     if(!empty($asset['public_path']) && preg_match('~^/assets/(?:blog|images/blog|documents/blog)/[A-Za-z0-9_.-]+\.(?:pdf|webp|jpg|png)$~',$asset['public_path']))return $asset['public_path'];
     return '/api/media/'.(int)$asset['id'].($inline?'/view':'/download');
