@@ -33,7 +33,5 @@ const settingsReady=fetch('/api/site-settings',{credentials:'omit',cache:'no-cac
  const place=document.querySelector('#contact .tiny-caption');if(place)place.textContent=settings.contact_location;
  const resume=document.querySelector('[data-resume-summary]');if(resume)resume.textContent=settings.resume_summary;
 }).catch(()=>{});
-const template=(text,data)=>text.replace(/\{(name|email|service|message)\}/g,(_,key)=>String(data.get(key)||''));
-const brief=document.getElementById('brief-form');brief?.addEventListener('submit',async e=>{e.preventDefault();if(!brief.reportValidity())return;await settingsReady;const data=new FormData(brief);const subject=template(settings.email_subject,data).replace(/[\r\n]/g,' ');const body=template(settings.email_body,data);const email='mailto:'+encodeURIComponent(settings.contact_email)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);document.getElementById('brief-status').textContent='Your email app will open with this brief. Review it and press Send there.';location.href=email;});
 document.querySelectorAll('.copy-email').forEach(button=>button.addEventListener('click',async()=>{await settingsReady;try{await navigator.clipboard.writeText(settings.contact_email);button.textContent='Email copied ✓';setTimeout(()=>button.textContent='Copy email',2500);}catch{button.textContent=settings.contact_email;}}));
 })();

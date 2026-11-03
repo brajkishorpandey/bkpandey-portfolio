@@ -5,7 +5,7 @@ class ReleaseSafety(unittest.TestCase):
  def test_runtime_files_never_deploy(self):
   with tempfile.TemporaryDirectory() as d:
    root=Path(d)
-   for name in ['dist/index.html','hosting/public_html/index.php','hosting/bkpandey-private/core.php','hosting/bkpandey-private/database.php','hosting/bkpandey-private/uploads/a.pdf','hosting/bkpandey-private/cache/session.json']:
+   for name in ['dist/index.html','hosting/public_html/index.php','hosting/bkpandey-private/core.php','hosting/bkpandey-private/database.php','hosting/bkpandey-private/uploads/a.pdf','hosting/bkpandey-private/cache/session.json','hosting/bkpandey-private/contact-config.json','hosting/bkpandey-private/contact-state/limits.json','hosting/bkpandey-private/contact-config-temporary']:
     path=root/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text('fixture')
    files=deploy.release_files(root)
    self.assertEqual(set(files),{'public_html/index.html','public_html/index.php','bkpandey-private/core.php'})

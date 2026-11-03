@@ -5,6 +5,9 @@ hosting/bkpandey-private/setup-attempts.json
 hosting/bkpandey-private/uploads/
 
 hosting/bkpandey-private/cache/
+hosting/bkpandey-private/contact-config.json
+hosting/bkpandey-private/contact-state/
+hosting/bkpandey-private/contact-config-*
 __pycache__/
 *.pyc
 

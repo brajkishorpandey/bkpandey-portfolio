@@ -3,7 +3,7 @@ declare(strict_types=1);
 $private=getenv('BP_PRIVATE_DIR') ?: dirname(__DIR__);
 $public=dirname($private).'/public_html';
 if(!is_file($private.'/core.php')){http_response_code(503);exit('Publishing service is being configured.');}
-require $private.'/core.php';require $private.'/migration-runner.php';bp_security_headers(true);
+require $private.'/core.php';require $private.'/migration-runner.php';require $private.'/admin-navigation.php';require $private.'/contact.php';bp_security_headers(true);
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS']==='off'){http_response_code(426);exit('Use HTTPS to access the publishing area.');}
 bp_session();$error='';$notice='';
 if(!bp_configured()){
@@ -50,6 +50,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $_SESSION['notice']=$uploadErrors?'Text saved. Upload: '.implode(' ',$uploadErrors):'Website updated. The public cache has been refreshed.';
             header('Location: /admin?site=1',true,303);exit;
         }
+        if($action==='contact_config'){bp_contact_save_config($_POST);$_SESSION['notice']='Contact email settings saved.';header('Location: /admin?contact=1',true,303);exit;}
+        if($action==='contact_test'){
+            bp_contact_limit(bp_contact_state_dir(),[['owner-test',3,3600]],time());
+            $site=bp_public_site_values();$test=['name'=>'Website delivery test','email'=>$site['contact_email'],'service'=>'Other collaboration','message'=>'This is a delivery test from your authenticated owner dashboard. No action is required.'];
+            $site['email_subject']='bkpandey.com contact delivery test';$site['email_body']='{message}';
+            if(!bp_contact_deliver($test,$site))throw new RuntimeException('The hosting mail service did not accept the test message.');
+            $notice='The hosting mail service accepted the test email for delivery. Check your inbox and spam folder.';
+        }
         if($action==='migrate'){$applied=bp_migrate($db);bp_cache_invalidate();$notice=count($applied).' database migrations applied.';}
         if($action==='cache'){bp_cache_invalidate();$notice='Public cache refreshed.';}
         if($action==='category'){
@@ -67,7 +75,7 @@ if(!bp_admin()){
     echo '<input type="hidden" name="action" value="login"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><div class="field"><label for="admin-email">Email</label><input id="admin-email" type="email" name="email" required autocomplete="username" maxlength="254"></div><div class="field"><label for="admin-password">Password</label><input id="admin-password" type="password" name="password" required autocomplete="current-password" maxlength="512"></div><button class="btn btn-primary" type="submit">Sign in ↗</button></form></main>';bp_page_end();exit;
 }
 $notice=$notice?:($_SESSION['notice']??'');unset($_SESSION['notice']);
-echo '<main id="main" class="container admin-shell"><p class="eyebrow">Publishing / Your blog</p><h1 style="margin-top:20px">Ideas worth sharing.</h1><div class="admin-toolbar"><a class="btn btn-primary" href="/admin?new=1">New article +</a><a class="btn" href="/admin">All articles</a><a class="btn" href="/admin?site=1">Website & résumé</a><a class="btn" href="/admin?account=1">Account & password</a><a class="btn" href="/admin?database=1">Database</a><a class="btn" href="/blog/" target="_blank" rel="noopener">View blog ↗</a><form method="post"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><button class="btn" name="action" value="logout">Sign out</button></form></div>';
+echo '<main id="main" class="container admin-shell"><p class="eyebrow">Publishing / Your blog</p><h1 style="margin-top:20px">Ideas worth sharing.</h1>';echo bp_admin_navigation($_GET);
 if($error)echo '<p class="admin-notice admin-error">'.bp_h($error).'</p>';if($notice)echo '<p class="admin-notice" role="status">'.bp_h($notice).'</p>';
 $edit=isset($_GET['edit'])?(int)$_GET['edit']:0;$post=null;
 if($edit){$q=$db->prepare('SELECT * FROM bp_blog_posts WHERE id=?');$q->execute([$edit]);$post=$q->fetch();}
@@ -76,6 +84,7 @@ if(isset($_GET['account'])){
 }
 elseif(isset($_GET['database'])){require $private.'/database-editor.php';}
 elseif(isset($_GET['site'])){require $private.'/site-editor.php';}
+elseif(isset($_GET['contact'])){require $private.'/contact-editor.php';}
 elseif(isset($_GET['new']) || $post){
     $p=$post?:['id'=>'','version'=>'','title'=>'','slug'=>'','excerpt'=>'','body'=>'','category_id'=>'','status'=>'draft','source_url'=>'','pdf_display'=>'carousel','slider_interval'=>6];
     if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='save' && $error)$p=array_merge($p,array_intersect_key($_POST,$p));

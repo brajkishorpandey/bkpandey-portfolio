@@ -41,6 +41,7 @@ jobs:
         run: |
           find hosting -type f -name '*.php' -print0 | xargs -0 -n1 php -l
           php tests/blog.php
+          php tests/contact.php
           BP_TEST_MYSQL=1 php tests/migrations.php
       - name: Build and verify release
         run: |
@@ -49,6 +50,7 @@ jobs:
           python3 build.py
           python3 blog_build.py
           node --check dist/assets/js/site.js
+          node --check dist/assets/js/contact.js
           node --check dist/assets/js/blog.js
           node --check dist/assets/js/media.js
           python3 scripts/verify_release.py

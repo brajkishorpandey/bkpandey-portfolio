@@ -12,6 +12,7 @@ ErrorDocument 404 /404.html
  RewriteRule ^admin/?$ blog/admin.php [END]
  RewriteRule ^admin/setup/?$ blog/owner-setup.php [END]
  RewriteRule ^api/site-settings/?$ media/settings.php [END]
+ RewriteRule ^api/contact/?$ media/contact.php [END]
  RewriteRule ^api/media/([1-9][0-9]*)/view$ blog/file.php?id=$1&inline=1 [END]
  RewriteRule ^api/media/([1-9][0-9]*)/download$ blog/file.php?id=$1 [END]
  RewriteRule ^media/profile/?$ media/profile.php [END]
@@ -36,7 +37,7 @@ AddType text/javascript .mjs
  Header always set X-Frame-Options "SAMEORIGIN"
  Header always set Strict-Transport-Security "max-age=31536000"
  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
- Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+ Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; frame-src 'self' https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
  <FilesMatch "\.(?:pdf|webp|png|jpg|jpeg|mjs)$">
   Header set Cache-Control "public, max-age=86400"
  </FilesMatch>

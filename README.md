@@ -124,4 +124,10 @@ The owner can apply pending trusted migrations through **Admin → Database**;
 there is also a private CLI. GitHub Actions tests the runner against SQLite and
 a MySQL 8.4 service. See `DATABASE.md` for activation and backup procedures.
 
+Contact messages can be sent through the hosting mail service after the owner
+configures production Turnstile keys under **Admin → Contact email**. Sending
+requires server-verified challenge/session tokens and atomic per-client and
+global limits. Custom recipients and attachments are rejected. See `CONTACT.md`.
+Admin navigation highlights the current section and exposes `aria-current`.
+
 Public app endpoints use clean routes (`/admin`, `/admin/setup`, `/api/site-settings`, `/api/media/ID/view`, `/media/profile`, and `/resume/download`). Direct script-suffix requests return 404. This reduces technology exposure; it does not make the server technology impossible to identify.

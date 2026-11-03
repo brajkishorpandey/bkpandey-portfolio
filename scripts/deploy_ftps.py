@@ -3,13 +3,13 @@ from pathlib import Path, PurePosixPath
 from ftplib import FTP_TLS, error_perm
 import hashlib, io, json, os, ssl, sys, uuid
 ROOT=Path(__file__).resolve().parents[1]
-PROTECTED={'database.php','setup-attempts.json','cache','uploads','releases','deploy-state.json'}
+PROTECTED={'database.php','setup-attempts.json','cache','uploads','releases','deploy-state.json','contact-config.json','contact-state'}
 def release_files(root=ROOT):
     result={}
     for base,prefix in [(root/'dist','public_html'),(root/'hosting/public_html','public_html'),(root/'hosting/bkpandey-private','bkpandey-private')]:
         for path in sorted(base.rglob('*')):
             parts=path.relative_to(base).parts
-            if any(p in PROTECTED or p=='__pycache__' for p in parts) or not path.is_file():continue
+            if any(p in PROTECTED or p=='__pycache__' or p.startswith('contact-config-') for p in parts) or not path.is_file():continue
             if path.is_symlink():raise ValueError('Release files may not be symbolic links.')
             if base==root/'dist' and path.name=='.htaccess':continue
             remote=prefix+'/'+path.relative_to(base).as_posix()
