@@ -26,8 +26,11 @@ class OriginRanges(unittest.TestCase):
         self.assertEqual(len(networks),len(set(networks)))
         for network in networks:
             ipaddress.ip_network(network,strict=True)
-        self.assertEqual(re.findall(r"-ipmatch '([^']+)'",GATE),networks)
-        self.assertNotIn('%{REMOTE_ADDR}',GATE)
+        self.assertEqual(re.findall(r"-ipmatch '([^']+)'",GATE),networks+networks)
+        litespeed,apache=GATE.split('<IfModule !LiteSpeed>')
+        self.assertIn('%{REMOTE_ADDR}',litespeed)
+        self.assertNotIn('%{REMOTE_ADDR}',apache)
+        self.assertIn('%{CONN_REMOTE_ADDR}',apache)
         self.assertNotIn('HTTP:',GATE)
         self.assertNotIn('HTTP_',GATE)
 

@@ -4,12 +4,16 @@ The owner's allowlist contains 15 IPv4 and seven IPv6 Cloudflare networks.
 `cloudflare-origin-ranges.json` records the exact networks and their public
 source: https://www.cloudflare.com/ips/ .
 
-The candidate gate is `hosting/cloudflare-origin-gate.conf`. It denies a
-connection whose actual peer (`CONN_REMOTE_ADDR`) is outside every listed
-network. It does not trust `CF-Connecting-IP`, `X-Forwarded-For`, or other
-request headers as proof that a connection came from Cloudflare. Apache may
-restore the real visitor IP in `REMOTE_ADDR`; using that address for the origin
-allowlist would reject ordinary visitors behind the proxy.
+The candidate gate is `hosting/cloudflare-origin-gate.conf`. Apache checks the
+connection peer (`CONN_REMOTE_ADDR`). LiteSpeed uses its server address
+(`REMOTE_ADDR`), whose handling is verified against the live host before
+activation. Neither branch reads `CF-Connecting-IP`, `X-Forwarded-For`, or other
+request headers as evidence that a connection came from Cloudflare.
+
+If LiteSpeed's server settings are changed to restore visitor addresses, this
+rule must be reviewed by the host. It must not be used with an unsafe setting
+that trusts forwarded IP headers from arbitrary clients. Live preflight tests
+check both Cloudflare admission and direct denial with forged proxy headers.
 
 The conditional denial is processed after ordinary child-directory authorization
 rules, so a child `Require all granted` does not reopen the origin. Existing
