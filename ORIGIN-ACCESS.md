@@ -18,8 +18,10 @@ Its internally recorded proxy peer keeps the restriction tied to the incoming
 connection. Live preflight tests check Cloudflare admission and direct denial
 with forged proxy headers.
 
-The LiteSpeed rewrite gate inherits before child-directory rules. Integration
-tests check that child authorization and a child rewrite cannot reopen access.
+LiteSpeed does not reliably honor Apache rewrite inheritance. The same generated
+gate is therefore installed explicitly in every public application `.htaccess`
+(root and blog). Validation rejects a new public access file without this gate.
+Integration tests check the explicit child gate before child authorization and rewrites.
 Place the origin block before existing routing rules. The gate denies access;
 it never grants access over existing sensitive-file denials.
 
@@ -48,3 +50,9 @@ skip those integration checks when Apache is unavailable.
 
 Keep this allowlist aligned with Cloudflare's published networks when they
 change. Do not broaden it with visitor IPs, loopback, or header-based exceptions.
+
+Activated on 2026-11-03 on the LiteSpeed origin. Original root and blog access
+files are backed up in `bkpandey-private/releases/cf-origin-20261103/`.
+Cloudflare A/AAAA records, live Cloudflare admission, direct-origin denial, and
+forged-header denial were verified. Runtime IPv6 peer behavior is covered by
+integration tests; the origin currently exposes an IPv4 address for live checks.

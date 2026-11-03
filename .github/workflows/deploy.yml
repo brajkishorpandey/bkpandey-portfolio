@@ -43,8 +43,8 @@ jobs:
           php tests/blog.php
           php tests/contact.php
           BP_TEST_MYSQL=1 php tests/migrations.php
-      - name: Check isolated origin policy on hosting
-        run: python3 scripts/check_origin_access.py --origin 23.111.137.162 --probe origin-policy-check-8197c403acf2
+      - name: Check live Cloudflare origin restriction
+        run: python3 scripts/check_origin_access.py --origin 23.111.137.162
       - name: Verify origin access control
         # The origin access tests use real Apache to verify connection-peer checks.
         # Apache comes from Ubuntu's signed package repositories.
@@ -94,3 +94,5 @@ jobs:
           FTPS_PRIVATE_ROOT: ${{ secrets.FTPS_PRIVATE_ROOT }}
           RELEASE_ID: ${{ github.sha }}
         run: python3 scripts/deploy_ftps.py
+      - name: Verify deployed origin restriction
+        run: python3 scripts/check_origin_access.py --origin 23.111.137.162

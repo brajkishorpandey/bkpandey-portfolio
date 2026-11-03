@@ -42,6 +42,15 @@ class OriginRanges(unittest.TestCase):
         self.assertNotIn('%{HTTP',LS_GATE)
         self.assertNotIn('%{ENV:HTTP_',LS_GATE)
 
+    def test_all_public_access_files_include_exact_gate(self):
+        files=list((ROOT/'hosting/public_html').rglob('.htaccess'))
+        self.assertGreaterEqual(len(files),2)
+        for path in files:
+            with self.subTest(path=str(path.relative_to(ROOT))):
+                content=path.read_text()
+                self.assertIn(LS_GATE,content)
+                self.assertEqual(content.count('# BEGIN Cloudflare-only origin'),1)
+
     def test_generated_peer_expression_matches_cidr_boundaries(self):
         ranges=json.loads((ROOT/'cloudflare-origin-ranges.json').read_text())
         networks=[ipaddress.ip_network(value) for value in ranges['ipv4']+ranges['ipv6']]
