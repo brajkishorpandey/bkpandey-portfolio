@@ -1,0 +1,23 @@
+name: Security verification
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Verify live controls without changing content
+        run: python3 scripts/security_verify.py
+      - name: Verify direct origin restrictions
+        if: always()
+        run: python3 scripts/check_origin_access.py --origin 23.111.137.162
+      - name: Audit locked production dependencies
+        if: always()
+        run: npm audit --omit=dev --ignore-scripts --audit-level=low
