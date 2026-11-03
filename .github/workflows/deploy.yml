@@ -43,12 +43,18 @@ jobs:
           php tests/blog.php
           php tests/contact.php
           BP_TEST_MYSQL=1 php tests/migrations.php
-      - name: Build and verify release
+      - name: Verify origin access control
         # The origin access tests use real Apache to verify connection-peer checks.
         # Apache comes from Ubuntu's signed package repositories.
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends apache2
+          apache2 -v
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Check isolated origin policy on hosting
+        run: python3 scripts/check_origin_access.py --origin 23.111.137.162 --probe origin-policy-check-8197c403acf2
+      - name: Build and verify release
+        run: |
           npm ci --ignore-scripts --omit=optional --no-audit --no-fund
           python3 scripts/prepare_assets.py
           python3 build.py
@@ -58,7 +64,6 @@ jobs:
           node --check dist/assets/js/blog.js
           node --check dist/assets/js/media.js
           python3 scripts/verify_release.py
-          python3 -m unittest discover -s tests -p 'test_*.py'
   deploy:
     needs: validate
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
