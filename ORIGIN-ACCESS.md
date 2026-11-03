@@ -6,20 +6,22 @@ source: https://www.cloudflare.com/ips/ .
 
 The Apache template is `hosting/cloudflare-origin-gate.conf`; it checks the
 connection peer (`CONN_REMOTE_ADDR`). The LiteSpeed template is
-`hosting/cloudflare-origin-litespeed.conf`; it uses native CIDR authorization
-in a file section, whose behavior is checked against the live host before
-activation. Neither template admits a connection based on client-supplied
+`hosting/cloudflare-origin-litespeed.conf`; it checks LiteSpeed's internal
+`PROXY_REMOTE_ADDR`, falling back to the server's `REMOTE_ADDR` only when no
+proxy restoration occurred. CIDRs are encoded as exact address expressions by
+`scripts/generate_origin_gate.py`, with boundary and independent CIDR-math tests.
+Neither template admits a connection based on client-supplied
 `CF-Connecting-IP`, `X-Forwarded-For`, or other request headers.
 
-If LiteSpeed's server settings are changed to restore visitor addresses, this
-rule must be reviewed by the host. It must not be used with an unsafe setting
-that trusts forwarded IP headers from arbitrary clients. Live preflight tests
-check both Cloudflare admission and direct denial with forged proxy headers.
+LiteSpeed can restore visitor addresses before ordinary access directives run.
+Its internally recorded proxy peer keeps the restriction tied to the incoming
+connection. Live preflight tests check Cloudflare admission and direct denial
+with forged proxy headers.
 
-The Apache conditional and LiteSpeed file section are processed after ordinary
-child-directory authorization. Integration tests check that a child
-`Require all granted` does not reopen access. Place the origin block before the
-existing sensitive-file denial rules so those denials continue to apply.
+The LiteSpeed rewrite gate inherits before child-directory rules. Integration
+tests check that child authorization and a child rewrite cannot reopen access.
+Place the origin block before existing routing rules. The gate denies access;
+it never grants access over existing sensitive-file denials.
 
 ## Activation and recovery
 

@@ -39,7 +39,7 @@ if __name__=='__main__':
         addresses=sorted({item[4][0] for item in socket.getaddrinfo(HOST,443,type=socket.SOCK_STREAM)})
         print(json.dumps({'dns':[{'address':address,'cloudflare':any(ipaddress.ip_address(address) in network for network in networks)} for address in addresses]}))
     except OSError:print(json.dumps({'dns_error':True}))
-    for variant,path in [('connection-peer','/'+args.probe+'/index.html'),('child-authorization','/'+args.probe+'/child/check.html'),('baseline','/'+args.probe+'-baseline/check.html'),('server-address','/'+args.probe+'-litespeed/check.html')]:
+    for variant,path in [('connection-peer','/'+args.probe+'/index.html'),('child-authorization','/'+args.probe+'/child/check.html'),('sensitive-file','/'+args.probe+'/blocked.txt'),('baseline','/'+args.probe+'-baseline/check.html')]:
         print(json.dumps({'variant':variant,'route':'public',**check(path)}))
         print(json.dumps({'variant':variant,'route':'direct-origin',**check(path,args.origin)}))
-        print(json.dumps({'variant':variant,'route':'direct-origin-forged-headers',**check(path,args.origin,{'CF-Connecting-IP':'173.245.48.1','X-Forwarded-For':'173.245.48.1','X-Real-IP':'173.245.48.1'})}))
+        print(json.dumps({'variant':variant,'route':'direct-origin-forged-headers',**check(path,args.origin,{'CF-Connecting-IP':'173.245.48.1','X-Forwarded-For':'173.245.48.1','X-Real-IP':'173.245.48.1','Proxy-Remote-Addr':'173.245.48.1'})}))

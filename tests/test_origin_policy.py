@@ -3,10 +3,12 @@ import grp
 import http.client
 import ipaddress
 import json
+import importlib.util
 import os
 from pathlib import Path
 import pwd
 import re
+import random
 import shutil
 import socket
 import subprocess
@@ -17,6 +19,8 @@ import unittest
 ROOT=Path(__file__).resolve().parents[1]
 GATE=(ROOT/'hosting/cloudflare-origin-gate.conf').read_text()
 LS_GATE=(ROOT/'hosting/cloudflare-origin-litespeed.conf').read_text()
+spec=importlib.util.spec_from_file_location('origin_generator',ROOT/'scripts/generate_origin_gate.py')
+generator=importlib.util.module_from_spec(spec);spec.loader.exec_module(generator)
 
 class OriginRanges(unittest.TestCase):
     def test_only_the_configured_cloudflare_networks_are_present(self):
@@ -28,12 +32,32 @@ class OriginRanges(unittest.TestCase):
         for network in networks:
             ipaddress.ip_network(network,strict=True)
         self.assertEqual(re.findall(r"-ipmatch '([^']+)'",GATE),networks)
-        self.assertEqual(re.findall(r'^\s*Require ip (.+)$',LS_GATE,re.M),networks)
+        self.assertEqual(LS_GATE,generator.litespeed_gate(ranges))
+        self.assertIn('%{ENV:PROXY_REMOTE_ADDR}',LS_GATE)
+        self.assertIn('RewriteOptions InheritDownBefore',LS_GATE)
         self.assertNotIn('%{REMOTE_ADDR}',GATE)
         self.assertIn('%{CONN_REMOTE_ADDR}',GATE)
         self.assertNotIn('HTTP:',GATE)
         self.assertNotIn('HTTP_',GATE)
-        self.assertNotIn('HTTP',LS_GATE)
+        self.assertNotIn('%{HTTP',LS_GATE)
+        self.assertNotIn('%{ENV:HTTP_',LS_GATE)
+
+    def test_generated_peer_expression_matches_cidr_boundaries(self):
+        ranges=json.loads((ROOT/'cloudflare-origin-ranges.json').read_text())
+        networks=[ipaddress.ip_network(value) for value in ranges['ipv4']+ranges['ipv6']]
+        pattern=re.compile(generator.peer_pattern(ranges),re.I);addresses=[]
+        for network in networks:
+            addresses += [network.network_address,network.network_address+1,network.broadcast_address-1,network.broadcast_address]
+            for number in [int(network.network_address)-1,int(network.broadcast_address)+1]:
+                if 0<=number<(1<<network.max_prefixlen):addresses.append(ipaddress.ip_address(number) if network.version==4 else ipaddress.IPv6Address(number))
+        rng=random.Random(59231)
+        addresses += [ipaddress.IPv4Address(rng.getrandbits(32)) for _ in range(500)]
+        addresses += [ipaddress.IPv6Address(rng.getrandbits(128)) for _ in range(500)]
+        for address in addresses:
+            expected=any(address in network for network in networks)
+            with self.subTest(address=str(address)):
+                self.assertEqual(bool(pattern.fullmatch(str(address))),expected)
+                self.assertEqual(bool(pattern.fullmatch(str(address).upper())),expected)
 
 @unittest.skipUnless(shutil.which('apache2'),'Apache is installed in GitHub validation')
 class ApacheOriginGate(unittest.TestCase):
@@ -46,7 +70,7 @@ class ApacheOriginGate(unittest.TestCase):
         (cls.public/'private.txt').write_text('private fixture')
         child=cls.public/'child';child.mkdir(mode=0o755)
         (child/'probe.txt').write_text('child probe')
-        (child/'.htaccess').write_text('Require all granted\n')
+        (child/'.htaccess').write_text('Require all granted\nRewriteEngine On\nRewriteRule ^ - [L]\n')
         (cls.public/'.htaccess').write_text(GATE)
         with socket.socket() as sock:
             sock.bind(('127.0.0.1',0));cls.port=sock.getsockname()[1]
@@ -59,9 +83,13 @@ class ApacheOriginGate(unittest.TestCase):
         group='www-data' if os.getuid()==0 else grp.getgrgid(os.getgid()).gr_name
         config=[f'ServerRoot "/etc/apache2"', 'ServerName localhost',f'PidFile "{cls.base}/httpd.pid"',f'DefaultRuntimeDir "{cls.base}"',f'Listen 127.0.0.1:{cls.port}',f'User {user}',f'Group {group}',f'ErrorLog "{cls.base}/error.log"','LogLevel warn']
         if cls.ipv6:config.append(f'Listen [::1]:{cls.port}')
-        for name in ['mpm_event','authz_core','authz_host','remoteip']:
+        for name in ['mpm_event','authz_core','authz_host','remoteip','rewrite','setenvif']:
             config.append(f'LoadModule {name}_module "{modules}/mod_{name}.so"')
-        config+=['RemoteIPHeader CF-Connecting-IP','RemoteIPTrustedProxy 127.0.0.1 ::1',f'DocumentRoot "{cls.public}"',f'<Directory "{cls.public}">','AllowOverride All','Require all granted','</Directory>']
+        config+=['RemoteIPHeader CF-Connecting-IP','RemoteIPTrustedProxy 127.0.0.1 ::1',
+                 # Test-only scaffolding models LiteSpeed's internal peer environment.
+                 'SetEnvIf CF-Connecting-IP "." PROXY_REMOTE_ADDR=127.0.0.1',
+                 'SetEnvIf X-Origin-Test-Peer "^([0-9a-fA-F:.]+)$" PROXY_REMOTE_ADDR=$1',
+                 f'DocumentRoot "{cls.public}"',f'<Directory "{cls.public}">','AllowOverride All','Require all granted','</Directory>']
         cls.config=cls.base/'httpd.conf';cls.config.write_text('\n'.join(config)+'\n')
         subprocess.run(['apache2','-t','-f',str(cls.config)],check=True,capture_output=True)
         cls.process=subprocess.Popen(['apache2','-f',str(cls.config),'-DFOREGROUND'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
@@ -121,9 +149,18 @@ class ApacheOriginGate(unittest.TestCase):
         self.assertEqual(self.request('/child/probe.txt'),403)
 
     def test_native_gate_preserves_sensitive_file_denial(self):
-        gate=LS_GATE.replace('173.245.48.0/20','127.0.0.1/32')
-        (self.public/'.htaccess').write_text(gate+'\n<Files "private.txt">\nRequire all denied\n</Files>\n')
-        self.assertEqual(self.request('/probe.txt'),200)
-        self.assertEqual(self.request('/private.txt'),403)
+        (self.public/'.htaccess').write_text(LS_GATE+'\n<Files "private.txt">\nRequire all denied\n</Files>\n')
+        headers={'CF-Connecting-IP':'198.51.100.17','X-Origin-Test-Peer':'173.245.48.1'}
+        self.assertEqual(self.request('/probe.txt',headers=headers),200)
+        self.assertEqual(self.request('/private.txt',headers=headers),403)
+
+    def test_native_gate_does_not_trust_forged_http_proxy_headers(self):
+        (self.public/'.htaccess').write_text(LS_GATE)
+        headers={'CF-Connecting-IP':'173.245.48.1','X-Forwarded-For':'173.245.48.1','Proxy-Remote-Addr':'173.245.48.1'}
+        self.assertEqual(self.request(headers=headers),403)
+
+    def test_native_gate_accepts_trusted_ipv6_peer(self):
+        (self.public/'.htaccess').write_text(LS_GATE)
+        self.assertEqual(self.request(headers={'CF-Connecting-IP':'198.51.100.17','X-Origin-Test-Peer':'2606:4700::1'}),200)
 
 if __name__=='__main__':unittest.main()
