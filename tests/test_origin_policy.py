@@ -16,6 +16,7 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 GATE=(ROOT/'hosting/cloudflare-origin-gate.conf').read_text()
+LS_GATE=(ROOT/'hosting/cloudflare-origin-litespeed.conf').read_text()
 
 class OriginRanges(unittest.TestCase):
     def test_only_the_configured_cloudflare_networks_are_present(self):
@@ -26,13 +27,13 @@ class OriginRanges(unittest.TestCase):
         self.assertEqual(len(networks),len(set(networks)))
         for network in networks:
             ipaddress.ip_network(network,strict=True)
-        self.assertEqual(re.findall(r"-ipmatch '([^']+)'",GATE),networks+networks)
-        litespeed,apache=GATE.split('<IfModule !LiteSpeed>')
-        self.assertIn('%{REMOTE_ADDR}',litespeed)
-        self.assertNotIn('%{REMOTE_ADDR}',apache)
-        self.assertIn('%{CONN_REMOTE_ADDR}',apache)
+        self.assertEqual(re.findall(r"-ipmatch '([^']+)'",GATE),networks)
+        self.assertEqual(re.findall(r'^\s*Require ip (.+)$',LS_GATE,re.M),networks)
+        self.assertNotIn('%{REMOTE_ADDR}',GATE)
+        self.assertIn('%{CONN_REMOTE_ADDR}',GATE)
         self.assertNotIn('HTTP:',GATE)
         self.assertNotIn('HTTP_',GATE)
+        self.assertNotIn('HTTP',LS_GATE)
 
 @unittest.skipUnless(shutil.which('apache2'),'Apache is installed in GitHub validation')
 class ApacheOriginGate(unittest.TestCase):
@@ -114,5 +115,15 @@ class ApacheOriginGate(unittest.TestCase):
         self.assertEqual(self.request(host='::1'),403)
         (self.public/'.htaccess').write_text(GATE.replace('2400:cb00::/32','::1/128'))
         self.assertEqual(self.request(host='::1',headers={'CF-Connecting-IP':'198.51.100.17'}),200)
+
+    def test_native_gate_is_not_overridden_by_child_directory_grant(self):
+        (self.public/'.htaccess').write_text(LS_GATE)
+        self.assertEqual(self.request('/child/probe.txt'),403)
+
+    def test_native_gate_preserves_sensitive_file_denial(self):
+        gate=LS_GATE.replace('173.245.48.0/20','127.0.0.1/32')
+        (self.public/'.htaccess').write_text(gate+'\n<Files "private.txt">\nRequire all denied\n</Files>\n')
+        self.assertEqual(self.request('/probe.txt'),200)
+        self.assertEqual(self.request('/private.txt'),403)
 
 if __name__=='__main__':unittest.main()

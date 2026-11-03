@@ -4,20 +4,22 @@ The owner's allowlist contains 15 IPv4 and seven IPv6 Cloudflare networks.
 `cloudflare-origin-ranges.json` records the exact networks and their public
 source: https://www.cloudflare.com/ips/ .
 
-The candidate gate is `hosting/cloudflare-origin-gate.conf`. Apache checks the
-connection peer (`CONN_REMOTE_ADDR`). LiteSpeed uses its server address
-(`REMOTE_ADDR`), whose handling is verified against the live host before
-activation. Neither branch reads `CF-Connecting-IP`, `X-Forwarded-For`, or other
-request headers as evidence that a connection came from Cloudflare.
+The Apache template is `hosting/cloudflare-origin-gate.conf`; it checks the
+connection peer (`CONN_REMOTE_ADDR`). The LiteSpeed template is
+`hosting/cloudflare-origin-litespeed.conf`; it uses native CIDR authorization
+in a file section, whose behavior is checked against the live host before
+activation. Neither template admits a connection based on client-supplied
+`CF-Connecting-IP`, `X-Forwarded-For`, or other request headers.
 
 If LiteSpeed's server settings are changed to restore visitor addresses, this
 rule must be reviewed by the host. It must not be used with an unsafe setting
 that trusts forwarded IP headers from arbitrary clients. Live preflight tests
 check both Cloudflare admission and direct denial with forged proxy headers.
 
-The conditional denial is processed after ordinary child-directory authorization
-rules, so a child `Require all granted` does not reopen the origin. Existing
-denials for sensitive files continue to apply to allowed Cloudflare traffic.
+The Apache conditional and LiteSpeed file section are processed after ordinary
+child-directory authorization. Integration tests check that a child
+`Require all granted` does not reopen access. Place the origin block before the
+existing sensitive-file denial rules so those denials continue to apply.
 
 ## Activation and recovery
 
