@@ -43,6 +43,8 @@ jobs:
           php tests/blog.php
           php tests/contact.php
           BP_TEST_MYSQL=1 php tests/migrations.php
+      - name: Check isolated origin policy on hosting
+        run: python3 scripts/check_origin_access.py --origin 23.111.137.162 --probe origin-policy-check-8197c403acf2
       - name: Verify origin access control
         # The origin access tests use real Apache to verify connection-peer checks.
         # Apache comes from Ubuntu's signed package repositories.
@@ -51,8 +53,6 @@ jobs:
           sudo apt-get install -y --no-install-recommends apache2
           apache2 -v
           python3 -m unittest discover -s tests -p 'test_*.py' -v
-      - name: Check isolated origin policy on hosting
-        run: python3 scripts/check_origin_access.py --origin 23.111.137.162 --probe origin-policy-check-8197c403acf2
       - name: Build and verify release
         run: |
           npm ci --ignore-scripts --omit=optional --no-audit --no-fund

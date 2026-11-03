@@ -87,7 +87,7 @@ class ApacheOriginGate(unittest.TestCase):
             config.append(f'LoadModule {name}_module "{modules}/mod_{name}.so"')
         config+=['RemoteIPHeader CF-Connecting-IP','RemoteIPTrustedProxy 127.0.0.1 ::1',
                  # Test-only scaffolding models LiteSpeed's internal peer environment.
-                 'SetEnvIf CF-Connecting-IP "." PROXY_REMOTE_ADDR=127.0.0.1',
+                 'SetEnvIfExpr "%{CONN_REMOTE_ADDR} =~ /^(.+)$/" PROXY_REMOTE_ADDR=$1',
                  'SetEnvIf X-Origin-Test-Peer "^([0-9a-fA-F:.]+)$" PROXY_REMOTE_ADDR=$1',
                  f'DocumentRoot "{cls.public}"',f'<Directory "{cls.public}">','AllowOverride All','Require all granted','</Directory>']
         cls.config=cls.base/'httpd.conf';cls.config.write_text('\n'.join(config)+'\n')
