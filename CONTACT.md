@@ -45,6 +45,13 @@ Rate limits count accepted reservations even if the mail service later rejects
 a message. Mail acceptance confirms queuing, not inbox delivery. Hosting mail
 logs and recipient spam filters remain outside application control.
 
+Deployment check on 3 November 2026: the hosting mail function accepted the
+owner-only test, but cPanel Track Delivery reported an outbound-relay rejection:
+`550 This message was classified as rSPAM and may not be delivered`. The domain's
+Email Deliverability status was Valid. Hosting support must review that outbound
+mail rejection, or an authorized mail transport must be configured, before inbox
+delivery can be confirmed. No repeated send attempts were made to evade it.
+
 These controls limit automation and abuse. No publicly accessible form can
 guarantee every sender is human or block a determined distributed attacker.
 The host's existing firewall and request protections remain necessary.
