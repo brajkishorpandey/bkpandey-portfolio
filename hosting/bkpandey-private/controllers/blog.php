@@ -12,21 +12,26 @@ if(!bp_configured()){
 }
 // A warm public response opens no database connection.
 try{
-    $html=bp_cached('html:blog:v3:'.$slug,function()use($slug,$public){
+    $html=bp_cached('html:blog:v4:'.$slug,function()use($slug,$public){
     $db=bp_db();ob_start();
 if($slug!==''){
     $post=bp_post($db,$slug);
     if(!$post){ob_end_clean();throw new OutOfBoundsException('Article not found.');}
     $assets=bp_assets($db,(int)$post['id']);
-    bp_page_start($post['title'],$post['excerpt'],'/blog/'.$post['slug'].'.html');
-    echo '<main id="main"><section class="page-hero" id="top"><div class="container"><div class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a></div><p class="eyebrow">'.bp_h($post['category']).' / '.bp_h($post['origin']).'</p><h1>'.bp_h($post['title']).'</h1><p class="lead">'.bp_h($post['excerpt']).'</p><div class="article-byline"><img src="/media/profile" width="42" height="42" alt=""><div><strong>Brajkishor Pandey</strong><p>Engineering leader · Fintech architect</p></div></div></div></section><article class="article-body container">';
+    bp_page_start($post['title'],$post['excerpt'],'/blog/'.$post['slug'].'.html',['article'=>$post,'image'=>bp_seo_image($assets)]);
+    echo '<main id="main"><section class="page-hero" id="top"><div class="container"><div class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a></div><p class="eyebrow">'.bp_h($post['category']).' / '.bp_h($post['origin']).'</p><h1>'.bp_h($post['title']).'</h1><p class="lead">'.bp_h($post['excerpt']).'</p><div class="article-byline"><img src="/media/profile" width="42" height="42" alt=""><div><strong><a href="/resume.html" rel="author">Brajkishor Pandey</a></strong><p>Engineering leader · Fintech architect</p></div></div></div></section><article class="article-body container">';
     if($post['source_url'])echo '<div class="article-source-note">Adapted from my LinkedIn writing and related technical material.<a class="btn btn-small" target="_blank" rel="noopener noreferrer" href="'.bp_h($post['source_url']).'">Original LinkedIn post ↗</a></div>';
-    echo bp_media_markup($assets,$post['pdf_display'],(int)$post['slider_interval']);echo bp_markdown($post['body']);
+    echo '<p class="article-dates">';
+    if($date=bp_seo_date($post['published_at']))echo 'Published <time datetime="'.$date.'">'.substr($date,0,10).'</time> · ';
+    if($date=bp_seo_date($post['updated_at']))echo 'Updated <time datetime="'.$date.'">'.substr($date,0,10).'</time>';
+    echo '</p>'.bp_media_markup($assets,$post['pdf_display'],(int)$post['slider_interval']);echo bp_markdown($post['body']);
+    $q=$db->prepare("SELECT slug,title FROM bp_blog_posts WHERE status='published' AND id<>? ORDER BY CASE WHEN category_id=? THEN 0 ELSE 1 END,published_at DESC,id DESC LIMIT 3");$q->execute([$post['id'],$post['category_id']]);
+    $related=$q->fetchAll();if($related){echo '<aside aria-label="Related articles"><h2>Continue reading</h2><ul>';foreach($related as $r)echo '<li><a href="/blog/'.bp_h($r['slug']).'.html">'.bp_h($r['title']).'</a></li>';echo '</ul></aside>';}
     echo '<div class="next-work"><h3>More from the blog.</h3><a class="btn btn-primary" href="/blog/">All articles ↗</a></div></article></main>';bp_page_end();return ob_get_clean();
 }
 $posts=bp_public_catalog($db);
 bp_page_start('Fintech & technology blog','Engineering perspectives on payment architecture, software, AI, and fintech.');
-echo '<main id="main"><section class="page-hero" id="top"><div class="container"><div class="breadcrumb"><a href="/">Home</a><span>/</span><span>Blog</span></div><p class="eyebrow">The blog / Fintech & technology</p><h1>Notes from the systems<br>that <span class="green">move money.</span></h1><p class="lead">Practical perspectives on payments, architecture, security, AI, and engineering leadership. Explore my articles, LinkedIn writing, and original visual guides.</p></div></section><section class="container blog-list-section"><div class="blog-toolbar"><div class="field"><label for="blog-search">Find an article</label><input id="blog-search" type="search" placeholder="Search payments, ledgers, AI…"></div><div class="field"><label for="blog-category">Explore a topic</label><select id="blog-category"><option value="all">All topics</option>';
+echo '<main id="main"><section class="page-hero" id="top"><div class="container"><div class="breadcrumb"><a href="/">Home</a><span>/</span><span>Blog</span></div><p class="eyebrow">The blog / Fintech & technology</p><h1>Notes from the systems<br>that <span class="green">move money.</span></h1><p class="lead">Practical perspectives on payments, architecture, security, AI, and engineering leadership. Explore my articles, LinkedIn writing, and original visual guides.</p><p><a class="text-link" href="https://www.linkedin.com/in/brajkishorpandey/" target="_blank" rel="me noopener noreferrer">Follow Brajkishor Pandey on LinkedIn ↗</a></p></div></section><section class="container blog-list-section"><div class="blog-toolbar"><div class="field"><label for="blog-search">Find an article</label><input id="blog-search" type="search" placeholder="Search payments, ledgers, AI…"></div><div class="field"><label for="blog-category">Explore a topic</label><select id="blog-category"><option value="all">All topics</option>';
 foreach(array_unique(array_column($posts,'category')) as $c)echo '<option>'.bp_h($c).'</option>';
 echo '</select></div></div><p class="blog-count" id="blog-count" role="status">Showing '.count($posts).' articles</p><div class="blog-grid">';
 foreach($posts as $i=>$post){

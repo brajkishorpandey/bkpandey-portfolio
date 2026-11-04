@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 // This directory belongs outside the public document root.
+require_once __DIR__.'/seo.php';
 function bp_settings(): array {
     $stored=[];$path=__DIR__.'/database.php';
     if(is_file($path)){$stored=require $path;if(!is_array($stored))$stored=[];}
@@ -170,8 +171,8 @@ function bp_multiple_files(array $files): array {
     if(count($files['name'])>12)throw new InvalidArgumentException('Upload up to 12 files at a time.');
     foreach($files['name'] as $i=>$name)$out[]=['name'=>$name,'tmp_name'=>$files['tmp_name'][$i],'error'=>$files['error'][$i],'size'=>$files['size'][$i]];return $out;
 }
-function bp_page_start(string $title,string $description,string $canonical='/blog/'): void {
-    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.bp_h($title).' | Brajkishor Pandey</title><meta name="description" content="'.bp_h($description).'"><meta name="theme-color" content="#141715"><link rel="canonical" href="https://bkpandey.com'.bp_h($canonical).'"><link rel="icon" href="/assets/images/favicon.svg"><link rel="stylesheet" href="/assets/css/site.css?v=3"><link rel="stylesheet" href="/assets/css/blog.css"><script defer src="/assets/js/site.js?v=3"></script><script type="module" src="/assets/js/media.js?v=2"></script><link rel="stylesheet" href="/assets/css/media.css?v=2"></head><body><a href="#main" class="skip">Skip to content</a><div class="progress" aria-hidden="true"></div>';
+function bp_page_start(string $title,string $description,string $canonical='/blog/',array $seo=[]): void {
+    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'.bp_seo_tags($title,$description,$canonical,$seo).'<link rel="icon" href="/assets/images/favicon.svg"><link rel="stylesheet" href="/assets/css/site.css?v=3"><link rel="stylesheet" href="/assets/css/blog.css"><script defer src="/assets/js/site.js?v=3"></script><script type="module" src="/assets/js/media.js?v=2"></script><link rel="stylesheet" href="/assets/css/media.css?v=2"></head><body><a href="#main" class="skip">Skip to content</a><div class="progress" aria-hidden="true"></div>';
     readfile(__DIR__.'/templates/header.html');
 }
 function bp_page_end(): void {readfile(__DIR__.'/templates/footer.html');}
@@ -258,6 +259,10 @@ function bp_serve_file(string $path,string $mime,string $name,bool $inline,bool 
 
 function bp_site_fields(): array {
     return [
+        'seo_home_title'=>['SEO — homepage title','Fintech Systems Architect & Engineering Leader',100,'text'],
+        'seo_home_description'=>['SEO — homepage description','Brajkishor Pandey: 18+ years in fintech engineering, cross-border payments, API platforms, software architecture, and team leadership. Explore projects and download my résumé.',320,'text'],
+        'seo_profile_title'=>['SEO — professional profile title','Brajkishor Pandey | Fintech Architect & Engineering Leader',100,'text'],
+        'seo_profile_description'=>['SEO — professional profile description','Brajkishor Pandey’s professional profile: 18+ years in engineering leadership, cross-border payments, software architecture, and full-stack development.',320,'text'],
         'hero_title'=>['Homepage headline',"I build systems\nthat move money.\nAnd businesses\nforward.",180,'text'],
         'hero_summary'=>['Homepage introduction','18+ years turning complex ideas into dependable platforms. Fintech architecture, hands-on engineering, and teams built to deliver.',450,'text'],
         'resume_summary'=>['Brief résumé','Engineering leader with 18+ years of experience building, improving, and operating fintech, mobility, commerce, enterprise, and data-driven platforms. Hands-on across architecture, backend delivery, payment APIs, production infrastructure, and team leadership.',1200,'text'],
@@ -286,7 +291,7 @@ function bp_validate_site_values(array $input): array {
     return $values;
 }
 function bp_public_site_values(): array {
-    return bp_cached('site-public:v2',function(){
+    return bp_cached('site-public:v3',function(){
         $v=[];foreach(bp_site_fields() as $key=>$field)$v[$key]=$field[1];
         if(bp_configured())foreach(bp_site_values(bp_db()) as $key=>$value)if(array_key_exists($key,$v))$v[$key]=$value;
         return $v;

@@ -1,0 +1,38 @@
+<?php
+declare(strict_types=1);
+require __DIR__.'/../hosting/bkpandey-private/core.php';
+$checks=0;function check(bool $ok,string $message):void{global $checks;$checks++;if(!$ok)throw new RuntimeException($message);}
+$v=[];foreach(bp_site_fields() as $key=>$field)$v[$key]=$field[1];
+$v['seo_home_title']='Owner edited title';$v['resume_summary']='An owner-edited professional summary.';
+$post=['category'=>'Payments','published_at'=>null,'updated_at'=>'2026-11-04 10:11:12','source_url'=>'https://www.linkedin.com/feed/update/urn:li:activity:123/'];
+$hostile='A </script><script>alert("x")</script> & payment';
+$head=bp_seo_tags($hostile,'A "quoted" summary','/blog/example.html',['article'=>$post],$v);
+preg_match('~<script type="application/ld\+json">(.*?)</script>~s',$head,$m);$data=json_decode($m[1],true,512,JSON_THROW_ON_ERROR);
+$articles=array_values(array_filter($data['@graph'],fn($x)=>$x['@type']==='BlogPosting'));
+check(count($articles)===1,'Exactly one article graph');$article=$articles[0];
+check($article['headline']===$hostile,'Preserve headline as safe JSON data');
+check(!str_contains($head,'<script>alert'),'A title cannot escape the JSON script');
+check(!isset($article['datePublished']),'Unknown original dates are omitted');
+check($article['dateModified']==='2026-11-04T10:11:12Z','Use a UTC modification date');
+check($article['author']['@id']==='https://bkpandey.com/resume.html#person','Article links to the profile entity');
+check(str_contains($head,'property="og:type" content="article"'),'Article sharing type');
+check(bp_seo_date('2026-02-30')===null,'Reject invalid calendar dates');
+check(bp_seo_date('2026-11-04')==='2026-11-04T00:00:00Z','Handle known date-only publications');
+$html='<head><title>Old</title><meta name="description" content="Old"><link rel="canonical" href="https://example.test"><script type="application/ld+json">{}</script></head><body>Visible owner content</body>';
+$html=bp_apply_seo_html($html,$v,'/');
+check(substr_count($html,'<title>')===1 && substr_count($html,'rel="canonical"')===1,'Replace legacy metadata without duplicates');
+check(str_contains($html,'Owner edited title') && str_contains($html,'Visible owner content'),'Keep owner SEO and body edits');
+check(bp_apply_seo_html($html,$v,'/')===$html,'Metadata replacement is idempotent');
+$profile=bp_seo_tags('Professional profile','Summary','/resume.html',[],$v);
+check(str_contains($profile,'"@type":"ProfilePage"') && str_contains($profile,$v['resume_summary']),'Profile graph uses editable visible biography');
+$db=new PDO('sqlite::memory:',null,null,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC]);
+$db->exec("CREATE TABLE bp_blog_posts(id INTEGER,slug TEXT,status TEXT,updated_at TEXT);CREATE TABLE bp_site_settings(updated_at TEXT);INSERT INTO bp_blog_posts VALUES(1,'published','published','2026-11-04 10:11:12'),(2,'draft','draft','2026-11-04 12:00:00'),(3,'archived','archived','2026-11-04 13:00:00');");
+$rows=bp_sitemap_rows($db,['/','/resume.html','/work/example.html','/admin?database=1']);
+check(isset($rows['/blog/published.html']) && !array_key_exists('/blog/draft.html',$rows) && !array_key_exists('/blog/archived.html',$rows),'Sitemap includes only published articles');
+check(!array_key_exists('/admin?database=1',$rows),'Private and query URLs are excluded');
+$xml=bp_sitemap_xml($rows);check(str_contains($xml,'2026-11-04T10:11:12Z'),'Sitemap uses actual content modification time');
+check(!str_contains($xml,'<lastmod></lastmod>'),'Never emit empty lastmod');
+$rss=bp_feed_xml([['slug'=>'example','title'=>'Payments & APIs','excerpt'=>'<script>','published_at'=>null]]);
+check(str_contains($rss,'Payments &amp; APIs') && str_contains($rss,'&lt;script&gt;'),'Escape feed text');
+check(!str_contains($rss,'<pubDate>'),'Feed does not invent publication dates');
+echo $checks." SEO behavior checks passed.\n";

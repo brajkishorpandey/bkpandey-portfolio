@@ -24,10 +24,19 @@ RewriteRule ^ - [F,END]
  RewriteCond %{HTTP:X-Forwarded-Proto} ^http$ [NC]
  RewriteRule ^ https://bkpandey.com%{REQUEST_URI} [R=308,END,NE]
  # END HTTPS redirect
+ RewriteCond %{HTTP_HOST} !^bkpandey\.com$ [NC]
+ RewriteRule ^ https://bkpandey.com%{REQUEST_URI} [R=308,END,NE]
+ # Canonical page aliases use a single public URL.
+ RewriteRule ^index\.html$ / [R=301,END]
+ RewriteRule ^blog$ /blog/ [R=301,END]
+ RewriteRule ^blog/index\.html$ /blog/ [R=301,END]
+ RewriteRule ^resume$ /resume.html [R=301,END]
  # The rule path is decoded by Apache; this also rejects percent-encoded script suffixes.
  RewriteCond %{ENV:REDIRECT_STATUS} ^$
  RewriteRule \.(?:php[0-9]*|phtml|phar|cgi|pl|shtml)(?:/|$) - [R=404,END,NC]
  RewriteRule ^(?:uploads|storage|bkpandey-private)(?:/|$) - [R=404,END,NC]
+ RewriteRule ^sitemap\.xml$ discovery.php [END]
+ RewriteRule ^blog/feed\.xml$ blog/feed.php [END]
  RewriteRule ^$ index.php [END]
  RewriteRule ^admin/?$ blog/admin.php [END]
  RewriteRule ^admin/setup/?$ blog/owner-setup.php [END]

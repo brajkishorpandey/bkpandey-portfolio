@@ -13,3 +13,10 @@ RewriteRule ^ - [F,END]
 
 DirectoryIndex disabled
 Options -Indexes -ExecCGI -Includes
+
+<IfModule mod_rewrite.c>
+ RewriteCond %{ENV:REDIRECT_STATUS} ^$
+ RewriteRule \.(?:php[0-9]*|phtml|phar|cgi|pl|shtml)(?:/|$) - [R=404,END,NC]
+ RewriteRule ^index\.html$ https://bkpandey.com/blog/ [R=301,END]
+ RewriteRule ^feed\.xml$ feed.php [END]
+</IfModule>

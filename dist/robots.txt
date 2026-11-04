@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /uploads/
+Disallow: /storage/
 Sitemap: https://bkpandey.com/sitemap.xml
