@@ -9,7 +9,7 @@ function bp_import_initial_articles(PDO $db): int {
             $q=$db->prepare('SELECT id FROM bp_blog_categories WHERE name=?');$q->execute([$post['category']]);$category=$q->fetchColumn();
             if(!$category){$q=$db->prepare('INSERT INTO bp_blog_categories(name) VALUES (?)');$q->execute([$post['category']]);$category=$db->lastInsertId();}
             $q=$db->prepare('INSERT INTO bp_blog_posts(category_id,slug,title,excerpt,body,status,source_url,origin,published_at,created_at,updated_at,pdf_display) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)');
-            $now=gmdate('Y-m-d H:i:s',time()-$i);$published=$post['published_at']?$post['published_at'].' 00:00:00':null;
+            $now=gmdate('Y-m-d H:i:s',time()-$i);$published=$post['published_at']?$post['published_at'].' 00:00:00':(($post['origin']??'')==='LinkedIn post'?$now:null);
             $q->execute([$category,$post['slug'],$post['title'],$post['excerpt'],$post['body'],'published',bp_source_url($post['source_url']),$post['origin'],$published,$now,$now,$post['attachment']?'carousel':'file']);$id=(int)$db->lastInsertId();
             if($post['attachment']){
                 $name=basename($post['attachment']);
@@ -17,6 +17,10 @@ function bp_import_initial_articles(PDO $db): int {
                     $q=$db->prepare('INSERT INTO bp_blog_assets(original_name,public_path,mime_type) VALUES (?,?,?)');$q->execute([$asset,'/assets/blog/'.$asset,$mime]);$aid=$db->lastInsertId();
                     $q=$db->prepare('INSERT INTO bp_blog_post_assets(post_id,asset_id,is_cover) VALUES (?,?,?)');$q->execute([$id,$aid,$cover]);
                 }
+            }elseif(!empty($post['cover_image'])){
+                $name=basename($post['cover_image']);
+                $q=$db->prepare('INSERT INTO bp_blog_assets(original_name,public_path,mime_type) VALUES (?,?,?)');$q->execute([$name,'/assets/images/blog/'.$name,'image/webp']);$aid=$db->lastInsertId();
+                $q=$db->prepare('INSERT INTO bp_blog_post_assets(post_id,asset_id,is_cover) VALUES (?,?,1)');$q->execute([$id,$aid]);
             }
             $added++;
         }

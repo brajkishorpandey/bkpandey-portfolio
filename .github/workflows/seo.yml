@@ -17,11 +17,12 @@ jobs:
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '8.5'
-          extensions: pdo_sqlite
+          extensions: pdo_sqlite, fileinfo
           coverage: none
           tools: none
       - name: Check PHP and SEO behavior
         run: |
           find hosting -name '*.php' -type f -print0 | xargs -0 -n1 php -l
           php tests/seo.php
+          php tests/blog.php
           python3 -m unittest discover -s tests -p 'test_seo.py' -v

@@ -20,7 +20,7 @@ if($slug!==''){
     $assets=bp_assets($db,(int)$post['id']);
     bp_page_start($post['title'],$post['excerpt'],'/blog/'.$post['slug'].'.html',['article'=>$post,'image'=>bp_seo_image($assets)]);
     echo '<main id="main"><section class="page-hero" id="top"><div class="container"><div class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a></div><p class="eyebrow">'.bp_h($post['category']).' / '.bp_h($post['origin']).'</p><h1>'.bp_h($post['title']).'</h1><p class="lead">'.bp_h($post['excerpt']).'</p><div class="article-byline"><img src="/media/profile" width="42" height="42" alt=""><div><strong><a href="/resume.html" rel="author">Brajkishor Pandey</a></strong><p>Engineering leader · Fintech architect</p></div></div></div></section><article class="article-body container">';
-    if($post['source_url'])echo '<div class="article-source-note">Adapted from my LinkedIn writing and related technical material.<a class="btn btn-small" target="_blank" rel="noopener noreferrer" href="'.bp_h($post['source_url']).'">Original LinkedIn post ↗</a></div>';
+    if($post['source_url'])echo '<div class="article-source-note">From my LinkedIn writing and related technical material.<a class="btn btn-small" target="_blank" rel="noopener noreferrer" href="'.bp_h($post['source_url']).'">Original LinkedIn post ↗</a></div>';
     echo '<p class="article-dates">';
     if($date=bp_seo_date($post['published_at']))echo 'Published <time datetime="'.$date.'">'.substr($date,0,10).'</time> · ';
     if($date=bp_seo_date($post['updated_at']))echo 'Updated <time datetime="'.$date.'">'.substr($date,0,10).'</time>';

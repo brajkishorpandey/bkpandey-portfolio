@@ -227,6 +227,96 @@
       "url": "https://bkpandey.com/assets/images/social-card.png",
       "sha256": "c34bb33ff7de0d0e45f207a1c1be7762622ce6e470d356ce6683c0258f3348e3",
       "size": 205497
+    },
+    {
+      "path": "dist/assets/documents/blog/linkedin-7518919219967639552.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/linkedin-7518919219967639552.pdf",
+      "size": 100210,
+      "sha256": "8fd78d4deb0b02292aa58497beb3276639f5b04d312b19a65b82488007aebb69"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7518919219967639552.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7518919219967639552.webp",
+      "size": 42192,
+      "sha256": "eacb1e1a4865cd45a7a21ae1961a3471bd49aa6ad9415314cf12db2e335ab566"
+    },
+    {
+      "path": "dist/assets/documents/blog/linkedin-7500127815170932736.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/linkedin-7500127815170932736.pdf",
+      "size": 82831,
+      "sha256": "7183d93865a19d664a569c10f14dae1046e01bce0a6490c90b1c5f21f5f165c5"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7500127815170932736.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7500127815170932736.webp",
+      "size": 30808,
+      "sha256": "1fdb5eb078b4d9f3ecec8f4761fb3ad4f7c3ee8ba275f5b05bbf15c5211fd01e"
+    },
+    {
+      "path": "dist/assets/documents/blog/linkedin-7490011227998351360.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/linkedin-7490011227998351360.pdf",
+      "size": 131173,
+      "sha256": "8b225b365618e3ede91a822bf2fef6c28e6e470b167467166738f1e52118ef78"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7490011227998351360.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7490011227998351360.webp",
+      "size": 40024,
+      "sha256": "1ad4ca540bc78bb4dd4626e2db23a51130d98cf0c3b1612a917d6aec481eee60"
+    },
+    {
+      "path": "dist/assets/documents/blog/linkedin-7475145809949323264.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/linkedin-7475145809949323264.pdf",
+      "size": 11750937,
+      "sha256": "fb0972d7f48ddbcf0da38c349c674a25ba9f0b878facd815615fbc513af15fb6"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7475145809949323264.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7475145809949323264.webp",
+      "size": 96348,
+      "sha256": "142c75ab27c0e1c7e4256fcee2b9682e5356c865997271adf69a1471fb9fb22a"
+    },
+    {
+      "path": "dist/assets/documents/blog/linkedin-7473700160083058688.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/linkedin-7473700160083058688.pdf",
+      "size": 15162997,
+      "sha256": "7da3b463d640faf8e01f1b3c5bf13fcbe20a3143e9e6537a873c3478e0a679eb"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7473700160083058688.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7473700160083058688.webp",
+      "size": 114160,
+      "sha256": "b813e4da2375e8401d202c43bc491c9faf2ae626fee3f726f9152bf8f834cad0"
+    },
+    {
+      "path": "dist/assets/documents/blog/linkedin-7472251046875209728.pdf",
+      "url": "https://bkpandey.com/assets/documents/blog/linkedin-7472251046875209728.pdf",
+      "size": 1884941,
+      "sha256": "d2030f6b781506346568fc169dfe622e0fdded118240f6a22eea4c47cfe0e73f"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7472251046875209728.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7472251046875209728.webp",
+      "size": 61428,
+      "sha256": "90c778b8fa7ce4989048a27edf5437c21f8ec55a6996a773006ced0f77c7e815"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7507475472084090882.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7507475472084090882.webp",
+      "size": 139446,
+      "sha256": "1cee68c37600f219c49c625f917fbb31f2a8db5a6c8a1895ec2e737f0de87a63"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7507474659022581760.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7507474659022581760.webp",
+      "size": 129220,
+      "sha256": "8270ffa5d856c621a0544a5d03a8b8b36223076c3ed95f94dc4afc49e5205f96"
+    },
+    {
+      "path": "dist/assets/images/blog/linkedin-7480200178747199488.webp",
+      "url": "https://bkpandey.com/assets/images/blog/linkedin-7480200178747199488.webp",
+      "size": 45988,
+      "sha256": "d615c2a99ef9510367fec3d12bb449cdd346ff5cc7de73136a2dee339b4f17bc"
     }
   ]
 }

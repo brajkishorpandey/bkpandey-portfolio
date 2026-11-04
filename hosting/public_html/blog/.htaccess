@@ -19,4 +19,7 @@ Options -Indexes -ExecCGI -Includes
  RewriteRule \.(?:php[0-9]*|phtml|phar|cgi|pl|shtml)(?:/|$) - [R=404,END,NC]
  RewriteRule ^index\.html$ https://bkpandey.com/blog/ [R=301,END]
  RewriteRule ^feed\.xml$ feed.php [END]
+ # LiteSpeed does not reliably inherit parent rewrites for existing HTML files.
+ RewriteRule ^$ index.php [END]
+ RewriteRule ^([a-z0-9]+(?:-[a-z0-9]+)*)\.html$ index.php?post=$1 [END]
 </IfModule>

@@ -1,0 +1,228 @@
+{
+  "collected_at": "2026-11-04",
+  "coverage": "Partial signed-in activity feed. The complete LinkedIn archive was requested and is pending. Identical group shares are not separate articles.",
+  "posts": [
+    {
+      "slug": "verify-php-web-runtime-security",
+      "title": "PHP security: verify the web runtime, not only the CLI",
+      "category": "Security",
+      "excerpt": "Running PHP? A patched CLI does not prove your website is protected. Two critical PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619 (“PHP2Shell”), can allow…",
+      "body": "Running PHP? A patched CLI does not prove your website is protected.\n\nTwo critical PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619 (“PHP2Shell”), can allow unauthenticated remote code execution. Both are rated CVSS v4.0 9.2.\n\nThe timeline matters:\n\n- 2024: early signs of the out-of-memory issue were identified.\n- August 2026: researchers reported working RCE paths.\n- 20 October: PHP issued a public pre-announcement.\n- 21 October: emergency security releases became available.\n\nGovernment agencies responded:\n\n🇺🇸 US NSA: inventory PHP systems and prioritize vendor patches.\n🇬🇧 UK NCSC: update urgently; assess exposure and possible compromise.\n🇮🇳 India CERT-In: rated the flaws CRITICAL and advised security updates.\n🇨🇦 Canada: patch affected systems immediately.\n🇦🇺 Australia: apply updates and monitor for suspicious activity.\n🇳🇿 New Zealand: patch and investigate potential compromise.\n🇪🇺 EU authorities: prioritize exposed systems; consider isolation if patching must wait.\n\nWhat to do now:\n\n1. Find every PHP installation: websites, APIs, containers, CMS platforms and bundled products.\n2. Install PHP 8.5.12, 8.4.27, 8.3.36 or 8.2.35, or your vendor’s confirmed fixed package.\n3. Replace or restart affected workers; rebuild and redeploy containers.\n4. Verify the web runtime for each site, alongside CLI and background workers.\n5. Review logs and investigate signs of compromise.\n\nSome vendors provide backported fixes for older branches. Verify the exact package advisory and plan a supported-version upgrade.\n\nUpdating a CMS or disabling exec() alone does not fix these PHP runtime flaws.\n\nSwipe through the PDF for the timeline, official sources and patching examples.\n\nPlanning a PHP migration?\n\nI can help move suitable services to Python/FastAPI or Node.js/TypeScript, with Next.js where appropriate—using agreed milestones, staged cutovers and rollback plans. Apply the PHP patch while that work is planned.\n\nI bring 18+ years of hands-on experience building technology products and leading engineering teams, particularly in fintech and payments.\n\nI help businesses with:\n\n- Payment integrations, ledgers, reconciliation and KYC/KYB workflows\n- Web and mobile applications, modernization and AI automation\n- Cloud infrastructure, security and DevOps\n- Engineering leadership and additional development capacity\n\nNeed patching support, a migration roadmap or fintech engineering expertise?\n\nDM me “PATCH” or “MIGRATE”, or send a connection request.\n\nWhatsApp: +91 98771 88099\nTelegram: @thefintechexpert\n\n#PHP #CyberSecurity #Fintech #ApplicationModernization #EngineeringLeadership",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7518919219967639552/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "linkedin-7518919219967639552.pdf",
+      "activity_id": "7518919219967639552"
+    },
+    {
+      "slug": "weekend-stablecoin-settlement",
+      "title": "24/7 payment apps need 24/7 settlement operations",
+      "category": "Blockchain",
+      "excerpt": "Your payment app runs 24/7. How long is your money waiting? On 30 September, Lloyds and Visa announced a seven-day live pilot that settled US$750,000 of payment obligations…",
+      "body": "Your payment app runs 24/7.\nHow long is your money waiting?\n\nOn 30 September, Lloyds and Visa announced a seven-day live pilot that settled US$750,000 of payment obligations using USDC.\n\nFunds reached Visa in under an hour, including over the weekend.\n\nThe pilot also tested interoperability between Lloyds’ Canton node and a separate public blockchain used by Visa.\n\nMy take for fintech founders and CTOs:\nMoving settlement beyond banking hours creates an engineering responsibility across the entire payment flow.\n- Liquidity — can treasury fund settlement outside normal working hours?\n- Ledgers — can every on-chain movement be matched to the correct obligation and accounting entry?\n- Controls — are signing permissions, transaction limits and compliance checks enforced before funds move?\n- Reconciliation — can operations resolve a mismatch between blockchain, provider and internal records?\n\nThis was a settlement pilot. Scaling the model requires those operational details to work consistently.\n\nIn my work on cross-border systems, these are the connections I focus on: payment execution, treasury, financial controls and reconciliation.\n\nIf stablecoin settlement is on your roadmap, which part of your operation still waits for Monday?\n\nOfficial source — Lloyds Banking\nGroup: https://lnkd.in/gkhUNUDJ\n\n#CrossBorderPayments #Stablecoins #Fintech #PaymentInfrastructure #Treasury",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7512840145088233472/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": null,
+      "activity_id": "7512840145088233472"
+    },
+    {
+      "slug": "mbridge-production-payment-governance",
+      "title": "Project mBridge: from payment pilots to production governance",
+      "category": "Payments",
+      "excerpt": "A major development in global cross-border payments: Saudi Arabia has ended active participation in Project mBridge after completing its planned proof of concept. This should…",
+      "body": "A major development in global cross-border payments:\nSaudi Arabia has ended active participation in Project mBridge after completing its planned proof of concept.\nThis should not simply be interpreted as “CBDCs have failed.” mBridge reached the MVP stage in 2024 and has reportedly processed more than 4,000 transactions worth approximately $55.5 billion.\nThe more important lesson is that moving from proof of concept to production requires much more than fast blockchain infrastructure:\n- Clear governance and legal finality\n- FX liquidity and treasury management\n- AML, sanctions and data controls\n- Interoperability with existing payment rails\n- Reconciliation, exception handling and auditability\n- Sustainable incentives for every participant\nFrom my experience building cross-border remittance platforms, speed is only the visible layer. The real test is whether every movement can be controlled, traced, reconciled and safely recovered when something fails.\nI do not expect SWIFT, CBDCs, stablecoins or instant-payment networks to eliminate one another. The future will be an intelligent orchestration layer connecting multiple rails with visibility and control.\nFrom proof of concept to production, trust is the real infrastructure.\nWhat will matter most at global scale: technology, governance or interoperability?\n#CrossBorderPayments #FinTech #CBDC #Payments #Remittance #PaymentInfrastructure #Reconciliation",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7507475472084090882/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": null,
+      "activity_id": "7507475472084090882",
+      "cover_image": "linkedin-7507475472084090882.webp"
+    },
+    {
+      "slug": "domestic-instant-payments-global",
+      "title": "Domestic instant payment rails are going global",
+      "category": "Payments",
+      "excerpt": "Cross-border payments are entering a new phase: domestic real-time payment systems are beginning to go global. This month, PhonePe and Visa announced Cross Border Scan to Pay…",
+      "body": "Cross-border payments are entering a new phase: domestic real-time payment systems are beginning to go global.\nThis month, PhonePe and Visa announced Cross Border Scan to Pay across 14 international markets, while Brazil’s central bank and the ECB are exploring a potential connection between Pix and TIPS.\nThese developments point towards greater interoperability among domestic payment rails, card networks, wallets and banking infrastructure.\nHowever, a faster customer experience does not automatically create a reliable cross-border transaction. The difficult work still happens behind the screen:\n- FX and liquidity management\n- AML and sanctions screening\n- Intelligent routing and partner failover\n- Ledger integrity and automated reconciliation\n- Refunds, disputes and audit visibility\nFrom my experience building remittance platforms, customers notice speed—but payment businesses survive on control, visibility and successful settlement.\nThe winners will not simply have the most integrations. They will intelligently orchestrate multiple rails, reconcile every movement and fail safely.\nWill the future be one global payment rail—or an intelligent layer connecting many rails?\n#CrossBorderPayments #FinTech #Payments #Remittance #PaymentInfrastructure #Reconciliation",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7507474659022581760/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": null,
+      "activity_id": "7507474659022581760",
+      "cover_image": "linkedin-7507474659022581760.webp"
+    },
+    {
+      "slug": "phonepe-visa-cardless-payments",
+      "title": "PhonePe and Visa: cardless and cross-border payments",
+      "category": "Payments",
+      "excerpt": "PhonePe and Visa launch cardless payment solutions: Tap to Pay, Cross Border Scan to Pay and Smart Accept were announced on 9 September. https://www.phonepe.com/",
+      "body": "PhonePe and Visa launch cardless payment solutions: Tap to Pay, Cross Border Scan to Pay and Smart Accept were announced on 9 September.\n\nhttps://www.phonepe.com/",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7503755205876887552/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": null,
+      "activity_id": "7503755205876887552"
+    },
+    {
+      "slug": "revolut-us-bank-charter",
+      "title": "Revolut and the US bank charter milestone",
+      "category": "Payments",
+      "excerpt": "Revolut moves closer to becoming a US bank: It received conditional approval for a US national bank charter, subject to further regulatory approvals. https://lnkd.in/dvXdYpCu",
+      "body": "Revolut moves closer to becoming a US bank: It received conditional approval for a US national bank charter, subject to further regulatory approvals.\n\n\nhttps://lnkd.in/dvXdYpCu",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7503754802217267201/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": null,
+      "activity_id": "7503754802217267201"
+    },
+    {
+      "slug": "smart-contract-cross-border-automation",
+      "title": "Smart contracts and automated cross-border settlement",
+      "category": "Blockchain",
+      "excerpt": "Cross-border payments do not become faster simply because blockchain is added. The real value begins when settlement rules are automated. Smart contracts can help cross-border…",
+      "body": "Cross-border payments do not become faster simply because blockchain is added.\nThe real value begins when settlement rules are automated.\nSmart contracts can help cross-border payment platforms:\n- Lock settlement funds in escrow\n- Release or refund funds automatically\n- Prevent duplicate settlements\n- Require multiple approvals for high-value transactions\n- Create a permanent and traceable audit record\n- Operate 24/7 without waiting for banking hours\n- Reduce manual reconciliation and operational work\nA simple settlement flow could be:\nThe customer pays in fiat currency.\nThe value is converted into a stablecoin.\nThe smart contract locks the settlement amount.\nThe payout partner pays the beneficiary locally.\nAn authorised backend submits the payout confirmation.\nThe contract releases the settlement or processes a refund.\nHowever, smart contracts cannot solve everything.\nThey do not remove the need for KYC/AML, liquidity, FX management, on-ramps, off-ramps, local payout partners, secure key management, and contract audits.\nSome suitable low-cost networks include:\n- Stellar and Soroban for payment-focused remittance infrastructure\n- Solana for high-volume and near-real-time stablecoin settlement\n- Polygon for low-cost EVM-compatible payments\n- Base for applications using the Ethereum and Coinbase ecosystem\nFor remittance businesses, the best network is not necessarily the fastest one. It is the network that offers the right liquidity, fiat connectivity, security, partner coverage, and total end-to-end cost for the required corridors.\nThe goal is not to put everything on-chain.\nThe goal is to make settlement faster, safer, more automatic, and easier to prove.\nI have prepared a detailed PDF explaining the complete model.\nWhich blockchain platform do you consider most suitable for cross-border settlement?\n#CrossBorderPayments #SmartContracts #Blockchain #Fintech #Remittance #Stellar #Soroban #Stablecoins #PaymentTechnology",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7500127815170932736/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "linkedin-7500127815170932736.pdf",
+      "activity_id": "7500127815170932736"
+    },
+    {
+      "slug": "internal-usd-wallet-architecture",
+      "title": "Internal USD wallet architecture: funding, ledger and reserves",
+      "category": "Ledgers",
+      "excerpt": "A wallet balance is not just a number in a database. Suppose customers can fund a wallet using USD, EUR, GBP, INR, BTC, ETH, USDC or USDT—but the wallet always maintains: 1…",
+      "body": "A wallet balance is not just a number in a database.\nSuppose customers can fund a wallet using USD, EUR, GBP, INR, BTC, ETH, USDC or USDT—but the wallet always maintains:\n1 Wallet Unit = USD 1\nThe correct internal flow should be:\nFunding received\n→ Settlement confirmed\n→ Compliance screening\n→ Currency or crypto converted\n→ Double-entry journal posted\n→ USD wallet balance credited\n→ External funds reconciled\nThe architecture requires:\n- Wallet orchestration\n- Fiat and crypto deposit services\n- FX and liquidity engine\n- Immutable double-entry ledger\n- Holds and available-balance controls\n- Withdrawal and payout orchestration\n- Treasury and reserve monitoring\n- Automated reconciliation\nA few rules should remain non-negotiable:\n- Never credit the wallet on a pending payment\n- Never let an admin directly edit a balance\n- Redis or cache must not become the money source of truth\n- Every callback must be idempotent\n- Corrections must use reversal entries\n- Customer wallet liabilities must remain fully backed\nBlockchain can be used as a funding and settlement rail, but the authoritative wallet ledger should remain on the internal server.\nAfter 17+ years in technology and extensive experience building high-volume cross-border payment platforms, I help fintech companies design secure wallet, ledger, treasury, reconciliation and payment architectures.\nIf you are building or scaling a wallet, remittance or cross-border payment platform, feel free to connect with me.\n#DigitalWallet #FinTech #CrossBorderPayments #PaymentArchitecture #DoubleEntryLedger #Blockchain #Treasury",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7490011227998351360/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "linkedin-7490011227998351360.pdf",
+      "activity_id": "7490011227998351360"
+    },
+    {
+      "slug": "payment-failure-operational-visibility",
+      "title": "Payment failures need operational visibility and recovery",
+      "category": "Architecture",
+      "excerpt": "In fintech, the real problem is not always a failed transaction. The real problem is not knowing exactly what happened after it failed. Did the partner receive the request? Did…",
+      "body": "In fintech, the real problem is not always a failed transaction.\nThe real problem is not knowing exactly what happened after it failed.\nDid the partner receive the request?\nDid the callback arrive?\nWas the payout successful?\nWas the transaction reversed?\nWas the amount reconciled?\nCan support explain the status?\nCan finance verify settlement?\nCan compliance trace the event?\nThis is where payment architecture becomes business-critical.\nA serious fintech platform needs:\n- Clear transaction lifecycle\n- Partner API monitoring\n- Safe retry and recovery logic\n- Duplicate-payment prevention\n- Callback handling\n- Reconciliation visibility\n- Fraud and risk signals\n- Audit trail\n- Operational dashboards\nMoving money is only one part.\nControlling, tracing, and recovering every outcome is the real engineering.\nIf your fintech, remittance, wallet, payout, or payment platform is struggling with transaction visibility, reconciliation, payment integrations, retry logic, fraud monitoring, DevOps, or backend scalability, I am open to meaningful conversations.\nSometimes one architecture review can prevent months of operational pain.\n#FinTech #Payments #CrossBorderPayments #Remittance #PaymentSystems #Reconciliation #FraudDetection #DevOps #PaymentInfrastructure #EngineeringLeadership #BackendArchitecture #TransactionMonitoring",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7486405203492098048/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "FinTech_Failed_Transaction_Visibility_Carousel.pdf",
+      "activity_id": "7486405203492098048"
+    },
+    {
+      "slug": "controlled-traceable-recoverable-payments",
+      "title": "Scaling fintech through controlled, traceable payments",
+      "category": "Architecture",
+      "excerpt": "A fintech platform doesn’t scale by adding more features. It scales when every transaction remains: - Controlled - Traceable - Recoverable The real problems usually appear…",
+      "body": "A fintech platform doesn’t scale by adding more features.\nIt scales when every transaction remains:\n- Controlled\n- Traceable\n- Recoverable\nThe real problems usually appear after launch:\nDelayed callbacks.\nUnclear statuses.\nDuplicate-payment risks.\nReconciliation mismatches.\nManual recovery.\nWeak operational visibility.\nThese are not only technical issues.\nThey directly affect customer trust, compliance, finance, and business growth.\nWith 17+ years in engineering and deep experience in remittance and cross-border payments, I help teams strengthen:\n- Payment architecture\n- Payout integrations\n- Reconciliation\n- Retry and recovery logic\n- Fraud and risk monitoring\n- DevOps and production reliability\nMoving money is easy.\nControlling every outcome is the real engineering.\n#FinTech #CrossBorderPayments #Remittance #PaymentSystems #Reconciliation #FraudDetection #DevOps #EngineeringLeadership",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7480200178747199488/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": null,
+      "activity_id": "7480200178747199488",
+      "cover_image": "linkedin-7480200178747199488.webp"
+    },
+    {
+      "slug": "payment-status-traceability",
+      "title": "Payment status, traceability and reconciliation",
+      "category": "Payments",
+      "excerpt": "A failed transaction should never be a mystery. When money moves, visibility matters. Strong payment systems should clearly show status journey, trace ID, partner logs, retry…",
+      "body": "A failed transaction should never be a mystery.\nWhen money moves, visibility matters.\nStrong payment systems should clearly show status journey, trace ID, partner logs, retry history, failure reason, and reconciliation status.\nGood engineering is not just sending money.\nIt is knowing what happened, why it happened, and what should happen next.\nOpen to remote roles, freelance projects, and consulting work in fintech, payments, backend, APIs, DevOps, and infrastructure.\n#Fintech #Payments #BackendArchitecture #APIDevelopment #DevOps #Reconciliation #RemoteWork",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7475145809949323264/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "linkedin-7475145809949323264.pdf",
+      "activity_id": "7475145809949323264"
+    },
+    {
+      "slug": "engineering-technical-ownership",
+      "title": "Engineering leadership means technical ownership",
+      "category": "Leadership",
+      "excerpt": "This week reminded me of one thing: Good technology is not only about writing code. It is about ownership. In real business systems, especially fintech and payment platforms,…",
+      "body": "This week reminded me of one thing:\nGood technology is not only about writing code.\nIt is about ownership.\nIn real business systems, especially fintech and payment platforms, the work does not end after development.\nYou also need to think about:\n- Will the API behave under pressure?\n- Can every transaction be traced?\n- Can failures be recovered safely?\n- Can support teams understand what happened?\n- Can reconciliation be trusted?\n- Can the system scale without chaos?\nThis is where experience matters.\nAfter working across fintech, cross-border payments, backend systems, infrastructure, security, DevOps, and production support, I strongly believe one thing:\nCompanies don’t just need developers.\nThey need technical owners.\nI am currently open to remote full-time roles, freelance projects, consulting work, and technical leadership opportunities.\nIf you are building, fixing, or scaling a fintech, payment, API, or backend platform, I would be happy to connect.\n#Fintech #RemoteWork #FreelanceDeveloper #BackendDeveloper #TechLead #EngineeringLeadership #Payments #DevOps #APIDevelopment",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7473700160083058688/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "linkedin-7473700160083058688.pdf",
+      "activity_id": "7473700160083058688"
+    },
+    {
+      "slug": "conversational-remittance-control-layer",
+      "title": "Conversation-based remittance needs a payment control layer",
+      "category": "AI & Data",
+      "excerpt": "Conversation-based remittance sounds simple. A user says: “I want to send money to my family.” The AI agent asks a few questions. The user confirms. The money moves. But in…",
+      "body": "Conversation-based remittance sounds simple.\nA user says:\n“I want to send money to my family.”\nThe AI agent asks a few questions.\nThe user confirms.\nThe money moves.\nBut in real remittance systems, this is not that simple.\nBehind one simple conversation, the platform must still handle:\n- Customer authentication\n- Beneficiary validation\n- FX rate and fee calculation\n- Purpose of transfer\n- KYC and compliance checks\n- Fraud and risk monitoring\n- Transaction limits\n- Payment routing\n- Partner API response\n- Callback handling\n- Reconciliation\n- Audit trail\n- Customer notification\n- Human handoff when required\nA chatbot can make the user experience easier.\nBut it cannot replace the payment control layer.\nThe real future of remittance is not only conversational.\nIt is conversational in front, and controlled in the backend.\nThat is where architecture matters.\nBecause when money moves, the system must know:\nWhere did the transaction start?\nWhat did the user request?\nWas the beneficiary verified?\nWas compliance completed?\nWhich rail or payout partner was used?\nWas the partner response received?\nWas the transaction reconciled?\nCan support, finance, and compliance see the same truth?\nThis is why AI agents in fintech should not be designed as isolated chat layers.\nThey should be connected to a secure transaction engine, compliance workflow, fraud monitoring, payment orchestration, reconciliation logic, and operational visibility.\nThe goal is not to make remittance look modern.\nThe goal is to make remittance easier for the customer and safer for the business.\nSimple UX in front.\nStrong payment control behind.\nThat is where the next generation of remittance platforms can create real value.\n#FinTech #Remittance #CrossBorderPayments #ConversationalAI #AI #PaymentSystems #PaymentInfrastructure #Reconciliation #Compliance #FraudDetection #TransactionMonitoring #EngineeringLeadership #BackendArchitecture",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7472995457955385344/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "Conversation_Based_Remittance_Natural_Carousel_Handdrawn_With_Language_Page.pdf",
+      "activity_id": "7472995457955385344"
+    },
+    {
+      "slug": "ai-remittance-transaction-engine",
+      "title": "AI remittance needs a reliable transaction engine",
+      "category": "AI & Data",
+      "excerpt": "AI agents can change remittance. But only if the payment platform behind them is strong enough. A conversational AI remittance system may allow users to say: “I want to send…",
+      "body": "AI agents can change remittance.\nBut only if the payment platform behind them is strong enough.\nA conversational AI remittance system may allow users to say:\n“I want to send money to my brother.”\nThen the system can guide the user through:\n- Beneficiary selection\n- FX rate and fee calculation\n- Purpose of transfer\n- KYC guidance\n- Risk checks\n- Confirmation\n- Transaction submission\nThis sounds simple on the front end.\nBut behind the conversation, the platform still needs serious engineering.\nBecause AI cannot replace:\n- Transaction control\n- Compliance validation\n- Fraud monitoring\n- Payment orchestration\n- Partner API reliability\n- Callback handling\n- Reconciliation logic\n- Audit trails\n- Human handoff\n- Operational visibility\nA chatbot can start a conversation.\nBut a secure payment system must complete the transaction.\nThat is where many fintech ideas fail.\nThey focus on the AI layer, but ignore the transaction layer.\nIn remittance, the real challenge is not only understanding what the customer wants.\nThe real challenge is safely moving money, tracking every step, handling failures, reconciling outcomes, and keeping compliance under control.\nThe future of remittance may become conversational.\nBut the winners will be the platforms that combine:\n- AI-powered customer experience\n- Strong payment architecture\n- Compliance-friendly automation\n- Multi-rail orchestration\n- Fraud and risk controls\n- Reliable reconciliation\nBecause when money moves, intelligence is useful.\nBut control is critical.\n#FinTech #Remittance #CrossBorderPayments #AI #ConversationalAI #PaymentSystems #Reconciliation #Compliance #FraudDetection #PaymentInfrastructure #EngineeringLeadership #BackendArchitecture #TransactionMonitoring",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7472251046875209728/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": "linkedin-7472251046875209728.pdf",
+      "activity_id": "7472251046875209728"
+    },
+    {
+      "slug": "upi-npi-remittance-interoperability",
+      "title": "UPI–NPI and interoperable cross-border remittance",
+      "category": "Payments",
+      "excerpt": "India and Nepal launching the UPI–NPI linkage is another strong signal that the future of remittance is moving toward real-time, low-cost, and interoperable payment rails. For…",
+      "body": "India and Nepal launching the UPI–NPI linkage is another strong signal that the future of remittance is moving toward real-time, low-cost, and interoperable payment rails.\n\nFor migrant workers and families, cross-border payment is not only a transaction. It is trust, speed, cost, and visibility.\n\nThe real winners in remittance will be the platforms that can connect multiple rails, manage compliance, track transactions end-to-end, and reduce manual dependency across operations and reconciliation.\n\nReal-time rails are growing. Now remittance platforms must become smarter around orchestration, risk, settlement, and customer transparency.\n\n#CrossBorderPayments #Remittance #FinTech #UPI #DigitalPayments #PaymentInfrastructure #FinancialInclusion #RealTimePayments #Nairagram #FintechLeadership\n\nhttps://lnkd.in/gwssMM3n",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7471187789175250944/",
+      "origin": "LinkedIn post",
+      "published_at": null,
+      "attachment": null,
+      "activity_id": "7471187789175250944"
+    }
+  ],
+  "backfill_sources": [
+    {
+      "slug": "payout-routing-total-cost",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7523005323180195840/"
+    },
+    {
+      "slug": "complete-fintech-operating-platform",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7515730734326648832/"
+    },
+    {
+      "slug": "webhook-security-business-state",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7514288912333385728/"
+    },
+    {
+      "slug": "payment-approval-version",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7513558925326159872/"
+    },
+    {
+      "slug": "partner-onboarding-first-payment",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7508480795083329536/"
+    },
+    {
+      "slug": "double-entry-money-truth",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7488922800854827009/"
+    },
+    {
+      "slug": "fintech-platform-specialist-support",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7487855538987433984/"
+    },
+    {
+      "slug": "cross-border-payment-system",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7485307052534190080/"
+    }
+  ],
+  "pending_activity_ids": [
+    "7484988358536998912",
+    "7484988052264611840"
+  ],
+  "pending_reason": "Recruitment referrals and attached third-party CVs need original dates and attachment review from the archive."
+}

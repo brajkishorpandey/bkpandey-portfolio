@@ -15,7 +15,7 @@ def markdown(text):
  if inside:result.append('</ul>')
  return ''.join(result)
 def image(p):
- return '/assets/images/blog/'+p['attachment'][:-4]+'.webp' if p['attachment'] else None
+ return '/assets/images/blog/'+p['attachment'][:-4]+'.webp' if p['attachment'] else ('/assets/images/blog/'+p['cover_image'] if p.get('cover_image') else None)
 def tile(p,i):
  cover=f'<img src="{image(p)}" width="800" height="800" loading="lazy" alt="Cover of {H(p["title"],quote=True)}">' if image(p) else f'<div class="blog-type-art tone-{i%4}"><span>BP / FIELD NOTES</span><strong>{H(p["category"])}</strong><b aria-hidden="true">✳</b></div>'
  return f'<article class="blog-card" data-category="{H(p["category"])}" data-search="{H((p["title"]+" "+p["excerpt"]+" "+p["category"]+" "+p["slug"]+" "+p["body"]).lower(),quote=True)}"><a class="blog-cover" href="/blog/{p["slug"]}.html">{cover}</a><div class="blog-card-meta"><span>{H(p["category"])}</span><span>{"PDF included" if p["attachment"] else "Article"}</span></div><h2><a href="/blog/{p["slug"]}.html">{H(p["title"])}</a></h2><p>{H(p["excerpt"])}</p><a class="blog-read" href="/blog/{p["slug"]}.html">Read article <span aria-hidden="true">↗</span></a></article>'
@@ -29,6 +29,8 @@ for i,p in enumerate(posts):
  if p['attachment']:
   a='/assets/documents/blog/'+p['attachment'];thumb=image(p)
   asset=f'<section class="media-carousel pdf-carousel container" data-pdf-carousel data-src="{a}" role="region" aria-roledescription="carousel" aria-label="{H(p["title"])}" tabindex="0"><div class="media-stage pdf-stage"><canvas aria-label="PDF page preview" hidden></canvas><p data-pdf-status role="status">PDF preview loads when you reach this guide.</p></div><div class="media-controls"><button type="button" data-prev disabled aria-label="Previous PDF page">←</button><span data-counter aria-live="polite">PDF guide</span><button type="button" data-next disabled aria-label="Next PDF page">→</button><a class="btn btn-small" href="{a}" download>Download PDF ↓</a></div><p class="media-caption">Use the arrows or your keyboard to browse. Download the PDF for its full accessible text.</p></section>' 
+ if p.get('cover_image') and not p['attachment']:
+  asset=f'<figure class="container"><img src="{image(p)}" alt="{H(p["title"],quote=True)}" loading="lazy" style="max-width:100%;height:auto"></figure>'
  source=f'<a class="btn btn-small" href="{p["source_url"]}" target="_blank" rel="noopener noreferrer">Read original on LinkedIn ↗</a>' if p['source_url'] else ''
  date=' · Originally published '+p['published_at'] if p['published_at'] else ''
  body=f'<main id="main"><section class="page-hero" id="top"><div class="container"><div class="breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span>{H(p["category"])}</span></div><p class="eyebrow">{H(p["category"])} / {H(p["origin"])}</p><h1>{H(p["title"])}</h1><p class="lead">{H(p["excerpt"])}</p><div class="article-byline"><img src="/assets/images/braj-portrait.webp" width="40" height="40" alt=""><div><strong><a href="/resume.html" rel="author">Brajkishor Pandey</a></strong><p>Engineering leader · Fintech architect{date}</p></div></div></div></section><div class="container">{asset}</div><article class="article-body container"><div class="article-source-note">{("Adapted from my LinkedIn writing and related technical material." if p["source_url"] else "Adapted from my technical carousel. The original PDF is included above.")} {source}</div>{markdown(p["body"])}<div class="next-work"><div><p class="eyebrow">Continue exploring</p><h3>More from the blog.</h3></div>{build.btn("All articles","/blog/",True)}</div></article></main>'
@@ -40,7 +42,7 @@ templates=ROOT/'hosting/bkpandey-private/templates';templates.mkdir(parents=True
 private=templates.parent
 (private/'seed.json').write_text(json.dumps(posts,ensure_ascii=False,indent=2))
 manifest=[dict(slug=p['slug'],title=p['title'],source_url=p['source_url'],attachment=p['attachment'],origin=p['origin']) for p in posts]
-(ROOT/'blog-import-manifest.json').write_text(json.dumps({'imported_at':'2026-11-02','coverage':'Publicly retrievable posts and owner-provided carousel files; not a verified complete LinkedIn history.','posts':manifest},ensure_ascii=False,indent=2))
+(ROOT/'blog-import-manifest.json').write_text(json.dumps({'imported_at':'2026-11-04','coverage':'Existing source material and partial signed-in LinkedIn activity; full archive requested, completion pending.','posts':manifest},ensure_ascii=False,indent=2))
 
 site=OUT/'sitemap.xml';s=site.read_text();s=re.sub(r'<url><loc>https://bkpandey.com/blog/.*?</url>','',s);s=s.replace('</urlset>','<url><loc>https://bkpandey.com/blog/</loc></url>'+''.join('<url><loc>https://bkpandey.com/blog/'+p['slug']+'.html</loc></url>' for p in posts)+'</urlset>');site.write_text(s)
 items=[]

@@ -18,7 +18,7 @@ class Links(HTMLParser):
   for key,value in attrs:
    if key not in {'href','src','data-src'} or not value or not value.startswith('/') or value.startswith('//'):continue
    path=unquote(urlsplit(value).path)
-   if path.endswith('.php') or path in {'/','/blog/'}:continue
+   if path.endswith('.php') or path in {'/','/blog/','/media/profile','/resume/download'}:continue
    if not (root/'dist'/path.lstrip('/')).is_file():errors.append(path)
 for html in (root/'dist').rglob('*.html'):Links().feed(html.read_text())
 if errors:raise SystemExit('Missing local assets: '+', '.join(sorted(set(errors))))

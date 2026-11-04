@@ -28,6 +28,8 @@ def metadata(title, description, path='/', article=None):
     if article:
         if article.get('attachment'):
             image = DOMAIN + '/assets/images/blog/' + article['attachment'][:-4] + '.webp'
+        elif article.get('cover_image'):
+            image = DOMAIN + '/assets/images/blog/' + article['cover_image']
         post = {'@type': 'BlogPosting', '@id': url + '#article', 'headline': title,
                 'description': description, 'url': url, 'mainEntityOfPage': {'@id': url + '#page'},
                 'author': {'@id': PERSON}, 'publisher': {'@id': PERSON}, 'inLanguage': 'en',

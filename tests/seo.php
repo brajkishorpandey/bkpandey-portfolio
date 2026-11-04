@@ -35,4 +35,6 @@ check(!str_contains($xml,'<lastmod></lastmod>'),'Never emit empty lastmod');
 $rss=bp_feed_xml([['slug'=>'example','title'=>'Payments & APIs','excerpt'=>'<script>','published_at'=>null]]);
 check(str_contains($rss,'Payments &amp; APIs') && str_contains($rss,'&lt;script&gt;'),'Escape feed text');
 check(!str_contains($rss,'<pubDate>'),'Feed does not invent publication dates');
+check(str_contains(bp_markdown('Source https://example.test/a?x=1&y=2.'),'href="https://example.test/a?x=1&amp;y=2"'),'Source links are usable and escaped');
+check(!str_contains(bp_markdown('https://example.test/<script>alert(1)</script>'),'<script>'),'Source linking cannot introduce scripts');
 echo $checks." SEO behavior checks passed.\n";

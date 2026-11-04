@@ -1,25 +1,130 @@
 {
-  "imported_at": "2026-11-02",
-  "coverage": "Publicly retrievable posts and owner-provided carousel files; not a verified complete LinkedIn history.",
+  "imported_at": "2026-11-04",
+  "coverage": "Existing source material and partial signed-in LinkedIn activity; full archive requested, completion pending.",
   "posts": [
+    {
+      "slug": "verify-php-web-runtime-security",
+      "title": "PHP security: verify the web runtime, not only the CLI",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7518919219967639552/",
+      "attachment": "linkedin-7518919219967639552.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "weekend-stablecoin-settlement",
+      "title": "24/7 payment apps need 24/7 settlement operations",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7512840145088233472/",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "mbridge-production-payment-governance",
+      "title": "Project mBridge: from payment pilots to production governance",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7507475472084090882/",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "domestic-instant-payments-global",
+      "title": "Domestic instant payment rails are going global",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7507474659022581760/",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "phonepe-visa-cardless-payments",
+      "title": "PhonePe and Visa: cardless and cross-border payments",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7503755205876887552/",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "revolut-us-bank-charter",
+      "title": "Revolut and the US bank charter milestone",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7503754802217267201/",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "smart-contract-cross-border-automation",
+      "title": "Smart contracts and automated cross-border settlement",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7500127815170932736/",
+      "attachment": "linkedin-7500127815170932736.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "internal-usd-wallet-architecture",
+      "title": "Internal USD wallet architecture: funding, ledger and reserves",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7490011227998351360/",
+      "attachment": "linkedin-7490011227998351360.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "payment-failure-operational-visibility",
+      "title": "Payment failures need operational visibility and recovery",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7486405203492098048/",
+      "attachment": "FinTech_Failed_Transaction_Visibility_Carousel.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "controlled-traceable-recoverable-payments",
+      "title": "Scaling fintech through controlled, traceable payments",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7480200178747199488/",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "payment-status-traceability",
+      "title": "Payment status, traceability and reconciliation",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7475145809949323264/",
+      "attachment": "linkedin-7475145809949323264.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "engineering-technical-ownership",
+      "title": "Engineering leadership means technical ownership",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7473700160083058688/",
+      "attachment": "linkedin-7473700160083058688.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "conversational-remittance-control-layer",
+      "title": "Conversation-based remittance needs a payment control layer",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7472995457955385344/",
+      "attachment": "Conversation_Based_Remittance_Natural_Carousel_Handdrawn_With_Language_Page.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "ai-remittance-transaction-engine",
+      "title": "AI remittance needs a reliable transaction engine",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7472251046875209728/",
+      "attachment": "linkedin-7472251046875209728.pdf",
+      "origin": "LinkedIn post"
+    },
+    {
+      "slug": "upi-npi-remittance-interoperability",
+      "title": "UPI–NPI and interoperable cross-border remittance",
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7471187789175250944/",
+      "attachment": null,
+      "origin": "LinkedIn post"
+    },
     {
       "slug": "payout-routing-total-cost",
       "title": "Your cheapest payout partner may be your most expensive route.",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7523005323180195840/",
       "attachment": "Brajkishor_Pandey_Payout_Routing_Carousel.pdf",
       "origin": "Technical carousel"
     },
     {
       "slug": "webhook-security-business-state",
       "title": "Valid signature. Wrong payment state.",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7514288912333385728/",
       "attachment": "Brajkishor_Pandey_Webhook_Security_Carousel.pdf",
       "origin": "Technical carousel"
     },
     {
       "slug": "payment-approval-version",
       "title": "Approved for A. Paid to B.",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7513558925326159872/",
       "attachment": "Brajkishor_Pandey_Payment_Approval_Security_Carousel.pdf",
       "origin": "Technical carousel"
     },
@@ -33,21 +138,21 @@
     {
       "slug": "partner-onboarding-first-payment",
       "title": "Your API works. Can a partner use it?",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7508480795083329536/",
       "attachment": "Brajkishor_Pandey_Partner_Onboarding_LinkedIn_Carousel.pdf",
       "origin": "Technical carousel"
     },
     {
       "slug": "complete-fintech-operating-platform",
       "title": "Your payment works. Can the business run on it?",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7515730734326648832/",
       "attachment": "Brajkishor_Pandey_Fintech_Platform_Architecture_Carousel.pdf",
       "origin": "Technical carousel"
     },
     {
       "slug": "cross-border-payment-system",
       "title": "Build a payment system, not only a transfer screen.",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7485307052534190080/",
       "attachment": "Cross_Border_Payments_Architecture_LinkedIn_Carousel.pdf",
       "origin": "Technical carousel"
     },
@@ -68,7 +173,7 @@
     {
       "slug": "double-entry-money-truth",
       "title": "A transaction status is not the money truth.",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7488922800854827009/",
       "attachment": "double_entry_ledger_cross_border_payments_linkedin.pdf",
       "origin": "Technical carousel"
     },
@@ -124,7 +229,7 @@
     {
       "slug": "fintech-platform-specialist-support",
       "title": "Where specialist fintech engineering helps.",
-      "source_url": null,
+      "source_url": "https://www.linkedin.com/feed/update/urn:li:activity:7487855538987433984/",
       "attachment": "Brajkishor_Pandey_FinTech_Platform_Lead_Generation_Carousel.pdf",
       "origin": "Technical carousel"
     },

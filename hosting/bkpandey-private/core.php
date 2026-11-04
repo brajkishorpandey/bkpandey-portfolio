@@ -31,14 +31,24 @@ function bp_source_url(?string $s): ?string {
     if (strlen($s)>2000 || !filter_var($s,FILTER_VALIDATE_URL) || strtolower((string)parse_url($s,PHP_URL_SCHEME))!=='https' || !parse_url($s,PHP_URL_HOST)) throw new InvalidArgumentException('Use a valid HTTPS source URL.');
     return $s;
 }
+function bp_inline_text(string $text): string {
+    $parts=preg_split('~(https://[^\s<>"\x27]+)~u',$text,-1,PREG_SPLIT_DELIM_CAPTURE);$out='';
+    foreach($parts as $i=>$part){
+        if($i%2===0){$out.=bp_h($part);continue;}
+        $url=rtrim($part,'.),;');$suffix=substr($part,strlen($url));
+        try{bp_source_url($url);$out.='<a href="'.bp_h($url).'" target="_blank" rel="noopener noreferrer">'.bp_h($url).'</a>'.bp_h($suffix);}
+        catch(InvalidArgumentException $e){$out.=bp_h($part);}
+    }
+    return $out;
+}
 function bp_markdown(string $text): string {
     $out='';$list=false;
     foreach (preg_split('/\R/u',$text) as $line) {
-        if (str_starts_with($line,'- ')) {if(!$list){$out.='<ul>';$list=true;}$out.='<li>'.bp_h(substr($line,2)).'</li>';continue;}
+        if (str_starts_with($line,'- ')) {if(!$list){$out.='<ul>';$list=true;}$out.='<li>'.bp_inline_text(substr($line,2)).'</li>';continue;}
         if($list){$out.='</ul>';$list=false;}
         if(str_starts_with($line,'## ')) $out.='<h2>'.bp_h(substr($line,3)).'</h2>';
         elseif(str_starts_with($line,'### ')) $out.='<h3>'.bp_h(substr($line,4)).'</h3>';
-        elseif(trim($line)!=='') $out.='<p>'.bp_h($line).'</p>';
+        elseif(trim($line)!=='') $out.='<p>'.bp_inline_text($line).'</p>';
     }
     return $out.($list?'</ul>':'');
 }

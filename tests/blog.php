@@ -34,9 +34,10 @@ denied(fn()=>bp_check_upload($pdf,'resume.php',filesize($pdf)),'Reject mismatche
 denied(fn()=>bp_check_upload($pdf,'resume.pdf',11*1024*1024),'Reject oversized attachment');
 require __DIR__.'/../hosting/bkpandey-private/seed-import.php';
 $db->exec('CREATE TABLE bp_blog_assets(id INTEGER PRIMARY KEY AUTOINCREMENT,original_name TEXT,public_path TEXT,storage_key TEXT,size_bytes INTEGER DEFAULT 0,mime_type TEXT);CREATE TABLE bp_blog_post_assets(post_id INTEGER,asset_id INTEGER,is_cover INTEGER,sort_order INTEGER DEFAULT 0,PRIMARY KEY(post_id,asset_id));');
-verify(bp_import_initial_articles($db)===29,'Import all initial articles');
+$seed=json_decode(file_get_contents(__DIR__.'/../hosting/bkpandey-private/seed.json'),true,512,JSON_THROW_ON_ERROR);
+verify(bp_import_initial_articles($db)===count($seed),'Import all initial articles');
 verify(bp_import_initial_articles($db)===0,'Repeated import is idempotent');
-verify((int)$db->query('SELECT COUNT(*) FROM bp_blog_assets')->fetchColumn()===36,'Import 18 PDFs and 18 cover images');
+verify((int)$db->query('SELECT COUNT(*) FROM bp_blog_assets')->fetchColumn()===array_sum(array_map(fn($p)=>$p['attachment']?2:(!empty($p['cover_image'])?1:0),$seed)),'Import the release PDFs and cover images');
 $db->exec("UPDATE bp_blog_posts SET title='Owner edited this' WHERE slug='payout-routing-total-cost'");
 bp_import_initial_articles($db);
 verify($db->query("SELECT title FROM bp_blog_posts WHERE slug='payout-routing-total-cost'")->fetchColumn()==='Owner edited this','Import preserves edited articles');
@@ -62,7 +63,7 @@ verify(bp_cached($key,$compute)===1 && bp_cached($key,$compute)===1,'Warm cache 
 bp_cache_invalidate();verify(bp_cached($key,$compute)===2,'Cache invalidates immediately');
 bp_set_site_value($db,'hero_title','A clear headline');verify(bp_site_values($db)['hero_title']==='A clear headline','Website settings persist');
 denied(fn()=>bp_set_site_value($db,'db_password','invalid'),'Settings reject credential keys');
-$catalog=bp_public_catalog($db);verify(count($catalog)===29,'Catalog excludes archived article');
+$catalog=bp_public_catalog($db);verify(count($catalog)===count($seed),'Catalog excludes archived article');
 $withPDF=array_values(array_filter($catalog,fn($p)=>count($p['assets'])>0))[0];
 verify(str_contains(bp_media_markup($withPDF['assets'],'carousel'),'data-pdf-carousel'),'PDF carousel markup');
 verify(!str_contains(bp_media_markup($withPDF['assets'],'file'),'data-pdf-carousel'),'PDF download mode does not load carousel');
