@@ -85,6 +85,7 @@ if(isset($_GET['account'])){
 elseif(isset($_GET['database'])){require $private.'/database-editor.php';}
 elseif(isset($_GET['site'])){require $private.'/site-editor.php';}
 elseif(isset($_GET['contact'])){require $private.'/contact-editor.php';}
+elseif(isset($_GET['traffic'])){require $private.'/traffic-editor.php';}
 elseif(isset($_GET['new']) || $post){
     $p=$post?:['id'=>'','version'=>'','title'=>'','slug'=>'','excerpt'=>'','body'=>'','category_id'=>'','status'=>'draft','source_url'=>'','pdf_display'=>'carousel','slider_interval'=>6];
     if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='save' && $error)$p=array_merge($p,array_intersect_key($_POST,$p));

@@ -54,3 +54,17 @@ The application user needs SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, ALTER,
 and REFERENCES on this one database. Normal editing does not require DROP,
 FILE, SUPER, GRANT, or global privileges. Provision only privileges required by
 the actual migrations and remove unused schema privileges afterward if desired.
+
+### Traffic reports
+
+Migration `002_traffic_reporting` adds the daily summaries, daily keyed visitor estimates and the archive cursor. The reports are available to the site owner under **Traffic reports** in `/admin`.
+
+Run the collector from cPanel Cron Jobs with the domain’s PHP CLI. For the initial import, add `--migrate`. The collector reads the domain’s two monthly gzip archives in the account’s `logs/` directory. Keep cPanel access log archiving enabled. The collector is safe to rerun as each batch and its cursor commit together.
+
+```sh
+/usr/local/bin/ea-php85 /home/bkpandey/bkpandey-private/traffic-collect.php --migrate
+```
+
+Schedule the collector every 15 minutes. Add `--mail` once the account’s outgoing relay is verified. The collector can send yesterday’s report once both archives have been imported after midnight in India. Archive updates determine when a complete report can be sent. Use `--send-date=YYYY-MM-DD` for a one-time delivery check on a completed imported day. The dashboard distinguishes mail accepted by the relay from inbox delivery.
+
+Keep `traffic-state/` outside the document root and preserve its visitor key during releases. The dashboard stores no raw request IPs, user agents or referral URLs. Reports estimate unique visitors and bot clients per India calendar day. Requests that Cloudflare handles entirely at its edge are outside this data source.
