@@ -34,21 +34,26 @@ try{
 }finally{foreach(glob($dir.'/*') as $file)unlink($file);rmdir($dir);}
 if(getenv('BP_TEST_MYSQL')==='1'){
     $db=new PDO('mysql:host=127.0.0.1;dbname=portfolio_test;charset=utf8mb4','root','ci-test-only-password',[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC]);
-    check_migration(bp_migrate($db)===['001_initial_schema'],'Create all tables on MySQL');
+    check_migration(bp_migrate($db)===['001_initial_schema','002_traffic_reporting'],'Create all tables on MySQL');
     $db->exec("INSERT INTO bp_site_settings(setting_key,setting_value) VALUES ('hero_title','Owner content')");
     check_migration(bp_migrate($db)===[],'MySQL repeated run is a no-op');
+    // Recreate the pre-migration installation in this disposable test database.
+    $db->exec('DROP TABLE bp_traffic_cursors, bp_traffic_visitors, bp_traffic_daily');
     $db->exec('DELETE FROM bp_schema_migrations');
-    check_migration(bp_migrate($db)===['001_initial_schema'],'MySQL adopts existing installation');
+    check_migration(bp_migrate($db)===['001_initial_schema','002_traffic_reporting'],'MySQL adopts existing installation');
     check_migration($db->query("SELECT setting_value FROM bp_site_settings WHERE setting_key='hero_title'")->fetchColumn()==='Owner content','MySQL preserves existing settings');
     $row=bp_migration_status($db)[0];check_migration($row['state']==='applied' && $row['completed_statements']===7,'MySQL records all seven baseline statements');
+    $traffic=bp_migration_status($db)[1];
+    check_migration($traffic['state']==='applied' && $traffic['completed_statements']===3,'MySQL records the traffic reporting migration');
     $lock='bp:migrate:'.substr(hash('sha256','portfolio_test'),0,40);
     $q=$db->prepare('SELECT IS_FREE_LOCK(?)');$q->execute([$lock]);check_migration((int)$q->fetchColumn()===1,'Migration lock is released');
     $dir=sys_get_temp_dir().'/bp-mysql-failure-'.bin2hex(random_bytes(8));mkdir($dir,0700);
     try{
         copy(__DIR__.'/../hosting/bkpandey-private/migrations/001_initial_schema.php',$dir.'/001_initial_schema.php');
-        file_put_contents($dir.'/002_fails.php',"<?php return ['CREATE TABLE bp_partial_test(id INTEGER)','INVALID SQL'];");
+        copy(__DIR__.'/../hosting/bkpandey-private/migrations/002_traffic_reporting.php',$dir.'/002_traffic_reporting.php');
+        file_put_contents($dir.'/003_fails.php',"<?php return ['CREATE TABLE bp_partial_test(id INTEGER)','INVALID SQL'];");
         reject_migration(fn()=>bp_migrate($db,$dir),'MySQL stops after a partially committed migration');
-        $row=$db->query("SELECT state,completed_statements FROM bp_schema_migrations WHERE version='002_fails'")->fetch();
+        $row=$db->query("SELECT state,completed_statements FROM bp_schema_migrations WHERE version='003_fails'")->fetch();
         check_migration($row['state']==='failed' && (int)$row['completed_statements']===1,'MySQL persists failed state and statement progress');
         reject_migration(fn()=>bp_migrate($db,$dir),'MySQL refuses automatic replay after partial failure');
     }finally{foreach(glob($dir.'/*') as $file)unlink($file);rmdir($dir);}
