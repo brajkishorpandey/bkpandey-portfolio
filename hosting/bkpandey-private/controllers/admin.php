@@ -24,7 +24,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if($action==='save'){
             $id=!empty($_POST['id'])?(int)$_POST['id']:null;
             $version=isset($_POST['version'])?(int)$_POST['version']:null;
-            $id=bp_save_post($db,$_POST,$id,$version);
+            require_once $private.'/social.php';
+            $id=bp_social_save_post($db,$_POST,$id,$version,bp_social_config()['channels']);
             $uploadErrors=[];
             foreach(['cover'=>true,'attachment'=>false] as $key=>$cover){if(isset($_FILES[$key]))try{bp_upload($db,$id,$_FILES[$key],$cover);}catch(Throwable $e){$uploadErrors[]=$e->getMessage();}}
             if(isset($_FILES['images']))foreach(bp_multiple_files($_FILES['images']) as $file)try{bp_upload($db,$id,$file,false,'image');}catch(Throwable $e){$uploadErrors[]=$e->getMessage();}
@@ -61,7 +62,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             bp_set_site_value($db,'ga4_property_id',$property);
             bp_set_site_value($db,'ga4_measurement_id',$measurement);
             $_SESSION['notice']='Google Analytics settings saved.';
-            header('Location: /admin?traffic=1',true,303);exit;
+            header('Location: '.(isset($_GET['analytics']) ? '/admin?analytics=1' : '/admin?traffic=1'),true,303);exit;
         }
         if($action==='contact_config'){bp_contact_save_config($_POST);$_SESSION['notice']='Contact email settings saved.';header('Location: /admin?contact=1',true,303);exit;}
         if($action==='contact_test'){
@@ -103,6 +104,8 @@ elseif(isset($_GET['database'])){require $private.'/database-editor.php';}
 elseif(isset($_GET['site'])){require $private.'/site-editor.php';}
 elseif(isset($_GET['contact'])){require $private.'/contact-editor.php';}
 elseif(isset($_GET['traffic'])){require $private.'/traffic-editor.php';}
+elseif(isset($_GET['analytics'])){require $private.'/ga4-page.php';}
+elseif(isset($_GET['social'])){require $private.'/social-editor.php';}
 elseif(isset($_GET['new']) || $post){
     $p=$post?:['id'=>'','version'=>'','title'=>'','slug'=>'','excerpt'=>'','body'=>'','category_id'=>'','status'=>'draft','source_url'=>'','pdf_display'=>'carousel','slider_interval'=>6];
     if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='save' && $error)$p=array_merge($p,array_intersect_key($_POST,$p));
@@ -117,9 +120,7 @@ elseif(isset($_GET['new']) || $post){
     }
     echo '<button class="btn btn-primary" type="submit">Save article ↗</button></form>';
 }else{
-    $rows=$db->query('SELECT p.id,p.title,p.slug,p.status,p.updated_at,c.name AS category FROM bp_blog_posts p JOIN bp_blog_categories c ON c.id=p.category_id ORDER BY p.updated_at DESC,p.id DESC')->fetchAll();
-    echo '<div class="admin-list-wrap"><table class="admin-list"><thead><tr><th>Article</th><th>Topic</th><th>State</th><th>Updated (UTC)</th><th></th></tr></thead><tbody>';
-    foreach($rows as $r)echo '<tr><td>'.bp_h($r['title']).'</td><td>'.bp_h($r['category']).'</td><td>'.bp_h($r['status']).'</td><td>'.bp_h($r['updated_at']).'</td><td><a href="/admin?edit='.(int)$r['id'].'">Edit ↗</a></td></tr>';
-    echo '</tbody></table></div><h2>Add a category.</h2><form method="post" class="admin-toolbar"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><input name="category_name" aria-label="New category name" required minlength="2" maxlength="80" style="max-width:300px"><button class="btn" name="action" value="category">Add category +</button></form>';
+    require $private.'/article-list.php';
+    echo '<h2>Add a category.</h2><form method="post" class="admin-toolbar"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><input name="category_name" aria-label="New category name" required minlength="2" maxlength="80" style="max-width:300px"><button class="btn" name="action" value="category">Add category +</button></form>';
 }
 echo '</main></div></body></html>';

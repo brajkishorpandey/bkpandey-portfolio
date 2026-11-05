@@ -1,4 +1,5 @@
-const sourceNames = new Set(['linkedin', 'contra', 'clutch', 'goodfirms', 'wellfound', 'github']);
+const socialSources = new Set(['linkedin', 'facebook', 'instagram', 'threads']);
+const sourceNames = new Set([...socialSources, 'contra', 'clutch', 'goodfirms', 'wellfound', 'github']);
 
 export function setupAnalytics(id) {
  const path = location.pathname;
@@ -22,11 +23,13 @@ export function setupAnalytics(id) {
   gtag('consent', 'update', {analytics_storage: 'granted'});
   gtag('js', new Date());
   const page = new URL(path, location.origin);
-  const source = new URLSearchParams(location.search).get('utm_source');
+  const campaign = new URLSearchParams(location.search);
+  const source = campaign.get('utm_source');
+  const isSocialPost = socialSources.has(source) && campaign.get('utm_medium') === 'social';
   if (sourceNames.has(source)) {
    page.searchParams.set('utm_source', source);
-   page.searchParams.set('utm_medium', 'referral');
-   page.searchParams.set('utm_campaign', 'portfolio_profile');
+   page.searchParams.set('utm_medium', isSocialPost ? 'social' : 'referral');
+   page.searchParams.set('utm_campaign', isSocialPost ? 'portfolio_article' : 'portfolio_profile');
   }
   let referrer = '';
   try { referrer = new URL(document.referrer).origin; } catch {}

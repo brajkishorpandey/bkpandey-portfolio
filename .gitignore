@@ -14,3 +14,4 @@ __pycache__/
 
 node_modules/
 hosting/bkpandey-private/ga4-credentials.json
+hosting/bkpandey-private/social-buffer.json

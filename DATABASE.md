@@ -76,3 +76,28 @@ The authenticated **Traffic reports** page accepts a public web-stream measureme
 For admin reporting, enable Google Analytics Data API in a Google Cloud project. Use a dedicated service account with no project roles and grant it **Viewer** on the portfolio’s Analytics property. Place the account’s JSON key in `/home/bkpandey/bkpandey-private/ga4-credentials.json` with mode `0600`. Keep it out of Git, public folders, release archives, and messages. The backend requests only the `analytics.readonly` scope and caches aggregate reports for one hour. Replace the key privately if it is rotated.
 
 With the connection configured, the existing daily traffic email includes a GA4 section. A temporary Google API error does not stop the server-log report. Google can revise recent totals as it processes events. The dashboard keeps Google metrics separate from server-log figures.
+
+### Social publishing
+
+The social publishing screen shows enabled destinations and the latest queue results. Migration `003_social_publishing` is required. Link the intended LinkedIn account, Facebook Page, Instagram professional account, and optionally Threads in Buffer. A connected account that needs approval in Buffer must allow automated publishing for the destination.
+
+Create the Buffer API key in the owner’s Buffer account. Keep the key and the selected Buffer channel IDs in `/home/bkpandey/bkpandey-private/social-buffer.json` with mode `0600`. Use this structure with your own values.
+
+```json
+{
+  "api_key": "replace-with-private-buffer-api-key",
+  "channels": {
+    "linkedin": "replace-with-buffer-channel-id",
+    "facebook": "replace-with-buffer-channel-id",
+    "instagram": "replace-with-buffer-channel-id"
+  }
+}
+```
+
+Schedule the worker every five minutes using the site’s PHP CLI. The job waits at least one minute after first publication so media uploads can finish.
+
+```sh
+/usr/local/bin/ea-php85 /home/bkpandey/bkpandey-private/social-worker.php
+```
+
+A published article queues a job for each configured platform. Existing articles are not backfilled. Use the Social publishing screen to distinguish local queue status from Buffer acceptance. For an ambiguous response, check Buffer before sharing again. The application never writes API keys or raw provider responses to the queue or logs.

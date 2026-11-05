@@ -6,13 +6,15 @@ const BP_ADMIN_SECTIONS = [
     'new' => ['New article', '/admin?new=1'],
     'site' => ['Website & résumé', '/admin?site=1'],
     'contact' => ['Contact email', '/admin?contact=1'],
+    'social' => ['Social publishing', '/admin?social=1'],
+    'analytics' => ['Google Analytics', '/admin?analytics=1'],
     'traffic' => ['Traffic reports', '/admin?traffic=1'],
     'account' => ['Account & password', '/admin?account=1'],
     'database' => ['Database', '/admin?database=1'],
 ];
 
 function bp_admin_section(array $query): string {
-    foreach (['account', 'database', 'site', 'contact', 'traffic', 'new'] as $section) {
+    foreach (['account', 'database', 'site', 'contact', 'traffic', 'analytics', 'social', 'new'] as $section) {
         if (isset($query[$section])) {
             return $section;
         }
@@ -23,7 +25,7 @@ function bp_admin_section(array $query): string {
 function bp_admin_return_path(array $query): string {
     $section = bp_admin_section($query);
     $route = BP_ADMIN_SECTIONS[$section][1];
-    if ($section === 'traffic') {
+    if (in_array($section, ['traffic', 'analytics'], true)) {
         $state = [];
         foreach (['day', 'from', 'to', 'email', 'size', 'page'] as $key) {
             if (is_string($query[$key] ?? null) && strlen($query[$key]) <= 16) {
@@ -43,8 +45,8 @@ function bp_admin_navigation(array $query): string {
     $html = '<aside class="admin-sidebar"><button type="button" class="btn admin-menu-toggle" aria-controls="admin-navigation" hidden>Menu <span aria-hidden="true">⌄</span></button>'
         .'<nav class="admin-nav" id="admin-navigation" aria-label="Admin navigation">';
     foreach ([
-        'Publishing' => ['articles', 'new'],
-        'Website' => ['site', 'contact', 'traffic'],
+        'Publishing' => ['articles', 'new', 'social'],
+        'Website' => ['site', 'contact', 'traffic', 'analytics'],
         'Settings' => ['account', 'database'],
     ] as $group => $keys) {
         $html .= '<div class="admin-nav-group"><p>'.bp_h($group).'</p><ul>';

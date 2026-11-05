@@ -4,7 +4,7 @@ declare(strict_types=1);
 const BP_TRAFFIC_SOURCES = [
     'direct' => 'Direct / unknown', 'linkedin' => 'LinkedIn', 'facebook' => 'Facebook',
     'instagram' => 'Instagram', 'google' => 'Google', 'bing' => 'Bing', 'x' => 'X / Twitter',
-    'whatsapp' => 'WhatsApp', 'other' => 'Other websites',
+    'whatsapp' => 'WhatsApp', 'threads' => 'Threads', 'other' => 'Other websites',
 ];
 
 function bp_traffic_today(): DateTimeImmutable {
@@ -45,7 +45,7 @@ function bp_traffic_source(string $referrer, string $target): string {
         'linkedin.com' => 'linkedin', 'lnkd.in' => 'linkedin',
         'facebook.com' => 'facebook', 'fb.com' => 'facebook', 'fb.me' => 'facebook',
         'instagram.com' => 'instagram', 'bing.com' => 'bing', 'x.com' => 'x',
-        'twitter.com' => 'x', 't.co' => 'x', 'whatsapp.com' => 'whatsapp', 'wa.me' => 'whatsapp',
+        'twitter.com' => 'x', 'threads.com' => 'threads', 'threads.net' => 'threads', 't.co' => 'x', 'whatsapp.com' => 'whatsapp', 'wa.me' => 'whatsapp',
     ] as $domain => $source) {
         if ($host === $domain || str_ends_with($host, '.'.$domain)) {
             return $source;

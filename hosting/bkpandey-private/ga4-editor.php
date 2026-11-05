@@ -52,12 +52,14 @@ if ($day !== null && $gaConnected) {
         <p class="admin-notice admin-error"><?= bp_h($gaError) ?></p>
     <?php elseif ($gaConnected): ?>
         <p>Open a daily report to view Google Analytics for that date.</p>
+    <?php elseif ($measurementId !== '' && $propertyId !== ''): ?>
+        <p>Your web stream is configured. Add the private read-only Data API credential to display Google reports here.</p>
     <?php else: ?>
-        <p>Reports appear here after a GA4 stream and read-only Data API access are connected.</p>
+        <p>Connect the GA4 web stream and read-only Data API to display reports here.</p>
     <?php endif; ?>
     <details>
         <summary>Google Analytics connection</summary>
-        <form action="/admin?traffic=1" method="post" class="admin-editor">
+        <form action="/admin?<?= isset($_GET['analytics']) ? 'analytics' : 'traffic' ?>=1" method="post" class="admin-editor">
             <input type="hidden" name="csrf" value="<?= bp_h(bp_csrf()) ?>">
             <input type="hidden" name="action" value="ga4_config">
             <div class="editor-grid">
