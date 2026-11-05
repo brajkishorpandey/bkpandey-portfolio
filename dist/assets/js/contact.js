@@ -37,5 +37,15 @@ form.addEventListener('submit',async event=>{
  }catch(error){message(error.message||'Your message could not be sent. Please use the email link.');retry.hidden=false;}
  finally{token='';challenge=null;send.disabled=true;}
 });
-if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();initialise();}},{rootMargin:'300px'});observer.observe(form);}else initialise();
+if (location.hash === '#contact' || !('IntersectionObserver' in window)) {
+ initialise();
+} else {
+ const observer = new IntersectionObserver(entries => {
+  if (entries.some(entry => entry.isIntersecting)) {
+   observer.disconnect();
+   initialise();
+  }
+ }, {rootMargin: '300px'});
+ observer.observe(form);
+}
 })();

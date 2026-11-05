@@ -9,3 +9,8 @@
 @media print{.header,.footer,.hero-art,.filter-bar,.contact-form,.marquee,.progress,.skip{display:none!important}body{background:white;color:black}.container{width:100%}.section{padding:25px 0}.project-cover{height:160px}a{color:black}.muted,p{color:#333!important}.reveal{opacity:1!important;transform:none!important}}
 
 .contact-trap{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}.contact-verification{min-height:0;margin:18px 0}.contact-form button:disabled{opacity:.55;cursor:not-allowed}.admin-nav [aria-current="page"]{outline:1px solid var(--accent);outline-offset:3px}
+
+/* A direct contact link should land immediately, even on a long page. */
+html:has(#contact:target){scroll-behavior:auto}
+#contact-retry[hidden]{display:none}
+.contact-profile-link{overflow-wrap:anywhere}

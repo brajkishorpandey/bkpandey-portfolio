@@ -2,6 +2,7 @@
 
 Run locally and import the resulting SQL through the owner's database tool.
 Existing articles, owner edits and uploads are preserved. No credentials in output.
+Refresh the application's public cache after importing through an external tool.
 """
 import argparse
 import json
@@ -11,11 +12,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def literal(value):
-    return 'NULL' if value is None else "CONVERT(0x" + str(value).encode().hex() + " USING utf8mb4)"
+    return 'NULL' if value is None else "CONVERT(0x" + str(value).encode().hex() + " USING utf8mb4) COLLATE utf8mb4_unicode_ci"
 
 
 def generate(batch):
-    sql = ['SET NAMES utf8mb4;', 'START TRANSACTION;']
+    sql = ['ROLLBACK;', 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;', 'START TRANSACTION;']
     # Insert oldest first so the public id tie-breaker follows source order.
     for post in reversed(batch['posts']):
         slug, source = literal(post['slug']), literal(post['source_url'])
