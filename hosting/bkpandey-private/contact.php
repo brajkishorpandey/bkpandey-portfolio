@@ -87,8 +87,29 @@ function bp_contact_verify_result(array $result,string $binding): bool {
     return ($result['success']??false)===true && ($result['hostname']??'')==='bkpandey.com' && ($result['action']??'')==='contact' && is_string($result['cdata']??null) && hash_equals($binding,$result['cdata']);
 }
 function bp_contact_verify_token(string $token,string $secret,string $ip,string $binding): bool {
-    $context=stream_context_create(['http'=>['method'=>'POST','header'=>"Content-Type: application/x-www-form-urlencoded\r\nAccept: application/json\r\n",'content'=>http_build_query(['secret'=>$secret,'response'=>$token,'remoteip'=>$ip]),'timeout'=>8,'follow_location'=>0,'ignore_errors'=>true],'ssl'=>['verify_peer'=>true,'verify_peer_name'=>true]]);
-    $raw=@file_get_contents('https://challenges.cloudflare.com/turnstile/v0/siteverify',false,$context,0,16385);
+    $url='https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    $body=http_build_query(['secret'=>$secret,'response'=>$token,'remoteip'=>$ip]);
+    $headers=['Content-Type: application/x-www-form-urlencoded','Accept: application/json'];
+    if(function_exists('curl_init')){
+        // Shared hosting may disable PHP URL streams even when outbound HTTPS works.
+        $curl=curl_init($url);
+        if($curl===false)return false;
+        $raw='';
+        curl_setopt_array($curl,[
+            CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>$body,CURLOPT_HTTPHEADER=>$headers,
+            CURLOPT_CONNECTTIMEOUT=>4,CURLOPT_TIMEOUT=>8,CURLOPT_FOLLOWLOCATION=>false,
+            CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_SSL_VERIFYHOST=>2,
+            CURLOPT_WRITEFUNCTION=>static function($handle,string $chunk)use(&$raw): int {
+                if(strlen($raw)+strlen($chunk)>16384)return 0;
+                $raw.=$chunk;
+                return strlen($chunk);
+            },
+        ]);
+        if(curl_exec($curl)===false)return false;
+    }else{
+        $context=stream_context_create(['http'=>['method'=>'POST','header'=>implode("\r\n",$headers)."\r\n",'content'=>$body,'timeout'=>8,'follow_location'=>0,'ignore_errors'=>true],'ssl'=>['verify_peer'=>true,'verify_peer_name'=>true]]);
+        $raw=@file_get_contents($url,false,$context,0,16385);
+    }
     if($raw===false || strlen($raw)>16384)return false;
     $result=json_decode($raw,true);return is_array($result) && bp_contact_verify_result($result,$binding);
 }
