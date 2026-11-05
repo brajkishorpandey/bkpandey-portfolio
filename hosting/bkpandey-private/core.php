@@ -152,9 +152,27 @@ function bp_check_upload(string $path,string $name,int $size): array {
     if(preg_match('/<\?(?:php\b|=)/i',(string)file_get_contents($path)))throw new InvalidArgumentException('Files containing executable script markers are not accepted.');
     return ['mime'=>$mime,'extension'=>$ext];
 }
+function bp_resume_upload_limit(): int {
+    $limit=10*1024*1024;
+    $upload=ini_parse_quantity((string)ini_get('upload_max_filesize'));
+    $post=ini_parse_quantity((string)ini_get('post_max_size'));
+    if($upload>0)$limit=min($limit,$upload);
+    // Leave room for the multipart headers, form token, and action.
+    if($post>0)$limit=min($limit,max(0,$post-8192));
+    return $limit;
+}
 function bp_store_upload(PDO $db,array $file,string $kind='any'): ?int {
-    if(($file['error']??UPLOAD_ERR_NO_FILE)===UPLOAD_ERR_NO_FILE)return null;
-    if(($file['error']??-1)!==UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name']))throw new InvalidArgumentException('Upload failed. Check the hosting upload limit and try a smaller file.');
+    $error=$file['error']??UPLOAD_ERR_NO_FILE;
+    if($error===UPLOAD_ERR_NO_FILE)return null;
+    if($error!==UPLOAD_ERR_OK){
+        throw new InvalidArgumentException(match($error){
+            UPLOAD_ERR_INI_SIZE,UPLOAD_ERR_FORM_SIZE=>'This file exceeds the upload limit shown on this page.',
+            UPLOAD_ERR_PARTIAL=>'The upload was interrupted. Select the file again and retry.',
+            UPLOAD_ERR_NO_TMP_DIR,UPLOAD_ERR_CANT_WRITE,UPLOAD_ERR_EXTENSION=>'Hosting could not receive the file. Your current file is still available.',
+            default=>'The upload could not be read. Select the file again and retry.',
+        });
+    }
+    if(!is_uploaded_file($file['tmp_name']??''))throw new InvalidArgumentException('Select the file again and retry.');
     $info=bp_check_upload($file['tmp_name'],$file['name'],(int)$file['size']);
     if($kind==='image' && !str_starts_with($info['mime'],'image/'))throw new InvalidArgumentException('Choose a JPEG, PNG, or WebP image.');
     if($kind==='pdf' && $info['mime']!=='application/pdf')throw new InvalidArgumentException('The résumé must be a PDF.');

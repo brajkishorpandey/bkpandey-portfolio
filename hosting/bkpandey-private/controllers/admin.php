@@ -12,6 +12,11 @@ if(!bp_configured()){
 try{$db=bp_db();}catch(Throwable $e){error_log('Portfolio admin database unavailable.');http_response_code(503);exit('Publishing is temporarily unavailable.');}
 if($_SERVER['REQUEST_METHOD']==='POST'){
     try{
+        $postMax=ini_parse_quantity((string)ini_get('post_max_size'));
+        if(isset($_GET['site']) && bp_admin() && !$_POST && !$_FILES && $postMax>0 && (int)($_SERVER['CONTENT_LENGTH']??0)>$postMax){
+            http_response_code(413);
+            throw new InvalidArgumentException('The request exceeded the hosting upload limit. Choose a PDF within the limit shown below.');
+        }
         bp_check_csrf($_POST['csrf']??null);$action=(string)($_POST['action']??'');
         if($action==='login'){
             if(!bp_try_login($db,(string)($_POST['email']??''),(string)($_POST['password']??''),(string)($_SERVER['REMOTE_ADDR']??'unknown')))throw new RuntimeException('Sign-in failed or temporarily limited. Check your details and try again later.');
@@ -42,6 +47,19 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if($action==='password'){
             bp_change_password($db,(int)$_SESSION['admin_id'],(string)($_POST['current_password']??''),(string)($_POST['new_password']??''),(string)($_POST['confirm_password']??''));
             $_SESSION=[];session_regenerate_id(true);$_SESSION['notice']='Password changed. Sign in with your new password.';header('Location: /admin',true,303);exit;
+        }
+        if($action==='site_resume'){
+            if(empty($_FILES['resume']) || !is_array($_FILES['resume']))throw new InvalidArgumentException('Select a résumé PDF to upload.');
+            try{
+                $aid=bp_store_upload($db,$_FILES['resume'],'pdf');
+                if($aid===null)throw new InvalidArgumentException('Select a résumé PDF to upload.');
+                bp_set_site_value($db,'resume_asset',(string)$aid);
+            }catch(PDOException $e){
+                error_log('Portfolio résumé upload could not be saved.');
+                throw new RuntimeException('The résumé could not be saved. Your current PDF is still available.');
+            }
+            $_SESSION['notice']='Résumé updated. The public download now uses your new PDF.';
+            header('Location: /admin?site=1',true,303);exit;
         }
         if($action==='site'){
             $values=bp_validate_site_values($_POST);

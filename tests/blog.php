@@ -105,4 +105,15 @@ require __DIR__.'/../hosting/bkpandey-private/article-list.php';
 $articleList = ob_get_clean();
 verify(str_contains($articleList,'Page 2 of 3') && str_contains($articleList,'status=published&amp;page=1'), 'Keep status while paging the articles');
 unset($_GET);
+ob_start();
+require __DIR__.'/../hosting/bkpandey-private/site-editor.php';
+$siteEditor=ob_get_clean();
+verify(str_contains($siteEditor,'name="action" value="site_resume"') && str_contains($siteEditor,'Upload résumé PDF'),'Provide an independent résumé upload');
+verify(str_contains($siteEditor,'name="MAX_FILE_SIZE" value="'.bp_resume_upload_limit().'"'),'Show and submit the effective upload limit');
+try{
+    bp_store_upload($db,['error'=>UPLOAD_ERR_INI_SIZE],'pdf');
+    throw new RuntimeException('Expected hosting size error.');
+}catch(InvalidArgumentException $e){
+    verify(str_contains($e->getMessage(),'upload limit'),'Explain hosting size errors');
+}
 echo $checks.' blog behavior and security checks passed.'.PHP_EOL;
