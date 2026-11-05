@@ -11,14 +11,18 @@ function bp_traffic_today(): DateTimeImmutable {
     return new DateTimeImmutable('today', new DateTimeZone('Asia/Kolkata'));
 }
 
-function bp_traffic_date(mixed $input, DateTimeImmutable $today): string {
+function bp_traffic_valid_day(mixed $input, DateTimeImmutable $today): ?string {
     if (is_string($input) && preg_match('/^\d{4}-\d{2}-\d{2}$/D', $input)) {
         $date = DateTimeImmutable::createFromFormat('!Y-m-d', $input, $today->getTimezone());
         if ($date && $date->format('Y-m-d') === $input && $date <= $today) {
             return $input;
         }
     }
-    return $today->format('Y-m-d');
+    return null;
+}
+
+function bp_traffic_date(mixed $input, DateTimeImmutable $today): string {
+    return bp_traffic_valid_day($input, $today) ?? $today->format('Y-m-d');
 }
 
 function bp_traffic_source(string $referrer, string $target): string {

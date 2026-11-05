@@ -44,11 +44,13 @@ check_contact(str_contains(base64_decode($captured[2]),$data['message']),'Preser
 check_contact(!str_contains($captured[1],"\r\nBcc:"),'Subject template cannot inject headers');
 reject_contact(fn()=>bp_contact_deliver($data,array_replace($site,['contact_email'=>"x@example.test\r\nBcc: y@example.test"]),fn()=>true),'Validate configured recipient at send time');
 reject_contact(fn()=>bp_contact_deliver(array_replace($data,['email'=>"x@example.test\r\nBcc: y@example.test"]),$site,fn()=>true),'Validate reply address at send time');
-foreach(['articles'=>[],'new'=>['new'=>'1'],'site'=>['site'=>'1'],'contact'=>['contact'=>'1'],'account'=>['account'=>'1'],'database'=>['database'=>'1']] as $section=>$query){
+foreach(['articles'=>[],'new'=>['new'=>'1'],'site'=>['site'=>'1'],'contact'=>['contact'=>'1'],'traffic'=>['traffic'=>'1'],'account'=>['account'=>'1'],'database'=>['database'=>'1']] as $section=>$query){
     check_contact(bp_admin_section($query)===$section,'Select current admin section');$html=bp_admin_navigation($query);
     check_contact(substr_count($html,'aria-current="page"')===1,'Exactly one admin navigation link is current');
-    check_contact(substr_count($html,'btn-primary')===1,'Exactly one admin navigation link is visually highlighted');
+    check_contact(str_contains($html, 'href="'.bp_h(BP_ADMIN_SECTIONS[$section][1]).'" aria-current="page"'), 'The correct admin link is highlighted');
 }
 check_contact(bp_admin_section(['edit'=>'12'])==='articles','Editing keeps article collection current');
 check_contact(bp_admin_section(['account'=>'1','database'=>'1'])==='account','Navigation follows controller view precedence');
+check_contact(bp_admin_return_path(['traffic'=>'1','day'=>'2026-11-03','next'=>'https://example.test'])==='/admin?traffic=1&day=2026-11-03','Sign-in retains the linked daily report');
+check_contact(bp_admin_return_path(['traffic'=>'1','day'=>"2026-11-03\r\nX: a"])==='/admin?traffic=1&day=2026-11-03%0D%0AX%3A%20a','Sign-in encodes header-breaking input');
 echo $checks.' contact and navigation checks passed.'.PHP_EOL;

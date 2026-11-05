@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         bp_check_csrf($_POST['csrf']??null);$action=(string)($_POST['action']??'');
         if($action==='login'){
             if(!bp_try_login($db,(string)($_POST['email']??''),(string)($_POST['password']??''),(string)($_SERVER['REMOTE_ADDR']??'unknown')))throw new RuntimeException('Sign-in failed or temporarily limited. Check your details and try again later.');
-            header('Location: /admin',true,303);exit;
+            header('Location: '.bp_admin_return_path($_GET),true,303);exit;
         }
         if(!bp_admin())throw new RuntimeException('Please sign in before making changes.');
         if($action==='logout'){
@@ -81,14 +81,18 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     catch(InvalidArgumentException|RuntimeException $e){$error=$e->getMessage();}
     catch(Throwable $e){error_log('Portfolio publishing operation failed.');$error='The change could not be saved. Check the slug and try again.';}
 }
-bp_page_start('Blog publishing','Owner publishing area.');
 if(!bp_admin()){
-    echo '<main id="main" class="container"><form class="admin-login" method="post"><p class="eyebrow">Brajkishor Pandey / Publisher</p><h1 style="margin-top:20px">Welcome back.</h1>';
+    bp_admin_page_start('Sign in');
+    echo '<main id="main" class="admin-login-wrap"><form class="admin-login" method="post"><p class="eyebrow">Owner access</p><h1 style="margin-top:20px">Welcome back.</h1>';
     if($error)echo '<p class="admin-notice admin-error">'.bp_h($error).'</p>';
-    echo '<input type="hidden" name="action" value="login"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><div class="field"><label for="admin-email">Email</label><input id="admin-email" type="email" name="email" required autocomplete="username" maxlength="254"></div><div class="field"><label for="admin-password">Password</label><input id="admin-password" type="password" name="password" required autocomplete="current-password" maxlength="512"></div><button class="btn btn-primary" type="submit">Sign in ↗</button></form></main>';bp_page_end();exit;
+    echo '<input type="hidden" name="action" value="login"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><div class="field"><label for="admin-email">Email</label><input id="admin-email" type="email" name="email" required autocomplete="username" maxlength="254"></div><div class="field"><label for="admin-password">Password</label><input id="admin-password" type="password" name="password" required autocomplete="current-password" maxlength="512"></div><button class="btn btn-primary" type="submit">Sign in ↗</button></form></main></body></html>';exit;
 }
 $notice=$notice?:($_SESSION['notice']??'');unset($_SESSION['notice']);
-echo '<main id="main" class="container admin-shell"><p class="eyebrow">Publishing / Your blog</p><h1 style="margin-top:20px">Ideas worth sharing.</h1>';echo bp_admin_navigation($_GET);
+$section=bp_admin_section($_GET);
+$title=$section==='articles' && isset($_GET['edit']) ? 'Edit article' : BP_ADMIN_SECTIONS[$section][0];
+bp_admin_page_start($title, true);
+echo '<div class="admin-layout">'.bp_admin_navigation($_GET).'<main id="main" class="admin-shell admin-content">'
+    .'<h1>'.bp_h($title).'</h1>';
 if($error)echo '<p class="admin-notice admin-error">'.bp_h($error).'</p>';if($notice)echo '<p class="admin-notice" role="status">'.bp_h($notice).'</p>';
 $edit=isset($_GET['edit'])?(int)$_GET['edit']:0;$post=null;
 if($edit){$q=$db->prepare('SELECT * FROM bp_blog_posts WHERE id=?');$q->execute([$edit]);$post=$q->fetch();}
@@ -118,4 +122,4 @@ elseif(isset($_GET['new']) || $post){
     foreach($rows as $r)echo '<tr><td>'.bp_h($r['title']).'</td><td>'.bp_h($r['category']).'</td><td>'.bp_h($r['status']).'</td><td>'.bp_h($r['updated_at']).'</td><td><a href="/admin?edit='.(int)$r['id'].'">Edit ↗</a></td></tr>';
     echo '</tbody></table></div><h2>Add a category.</h2><form method="post" class="admin-toolbar"><input type="hidden" name="csrf" value="'.bp_h(bp_csrf()).'"><input name="category_name" aria-label="New category name" required minlength="2" maxlength="80" style="max-width:300px"><button class="btn" name="action" value="category">Add category +</button></form>';
 }
-echo '</main>';bp_page_end();
+echo '</main></div></body></html>';

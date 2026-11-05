@@ -7,7 +7,8 @@ $measurementId = bp_ga4_measurement_id($gaSettings['ga4_measurement_id'] ?? '');
 $propertyId = bp_ga4_property_id($gaSettings['ga4_property_id'] ?? '');
 $gaReport = null;
 $gaError = '';
-if ($measurementId !== '' && $propertyId !== '' && is_readable(bp_ga4_credentials_path())) {
+$gaConnected = $measurementId !== '' && $propertyId !== '' && is_readable(bp_ga4_credentials_path());
+if ($day !== null && $gaConnected) {
     try {
         $gaReport = bp_ga4_report($propertyId, $day);
     } catch (Throwable $e) {
@@ -16,7 +17,7 @@ if ($measurementId !== '' && $propertyId !== '' && is_readable(bp_ga4_credential
     }
 }
 ?>
-<section class="admin-section" aria-labelledby="ga4-heading">
+<section class="admin-section traffic-panel" aria-labelledby="ga4-heading">
     <h2 id="ga4-heading">Google Analytics 4</h2>
     <p>Google Analytics counts visitors who allow analytics. The server-log report above includes separate request and bot estimates.</p>
     <?php if ($gaReport): ?>
@@ -49,6 +50,8 @@ if ($measurementId !== '' && $propertyId !== '' && is_readable(bp_ga4_credential
             Property time zone <?= bp_h($gaReport['timezone']) ?>.<?php endif; ?></p>
     <?php elseif ($gaError !== ''): ?>
         <p class="admin-notice admin-error"><?= bp_h($gaError) ?></p>
+    <?php elseif ($gaConnected): ?>
+        <p>Open a daily report to view Google Analytics for that date.</p>
     <?php else: ?>
         <p>Reports appear here after a GA4 stream and read-only Data API access are connected.</p>
     <?php endif; ?>
