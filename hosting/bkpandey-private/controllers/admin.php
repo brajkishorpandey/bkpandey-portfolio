@@ -50,6 +50,19 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $_SESSION['notice']=$uploadErrors?'Text saved. Upload: '.implode(' ',$uploadErrors):'Website updated. The public cache has been refreshed.';
             header('Location: /admin?site=1',true,303);exit;
         }
+        if($action==='ga4_config'){
+            require_once $private.'/ga4.php';
+            $measurement=strtoupper(trim((string)($_POST['ga4_measurement_id']??'')));
+            $property=trim((string)($_POST['ga4_property_id']??''));
+            if(($measurement!=='' && bp_ga4_measurement_id($measurement)==='') ||
+                ($property!=='' && bp_ga4_property_id($property)==='')){
+                throw new InvalidArgumentException('Enter a valid Google Analytics measurement ID and numeric property ID.');
+            }
+            bp_set_site_value($db,'ga4_property_id',$property);
+            bp_set_site_value($db,'ga4_measurement_id',$measurement);
+            $_SESSION['notice']='Google Analytics settings saved.';
+            header('Location: /admin?traffic=1',true,303);exit;
+        }
         if($action==='contact_config'){bp_contact_save_config($_POST);$_SESSION['notice']='Contact email settings saved.';header('Location: /admin?contact=1',true,303);exit;}
         if($action==='contact_test'){
             bp_contact_limit(bp_contact_state_dir(),[['owner-test',3,3600]],time());

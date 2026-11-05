@@ -12,7 +12,7 @@ if(!bp_configured()){
 }
 // A warm public response opens no database connection.
 try{
-    $html=bp_cached('html:blog:v4:'.$slug,function()use($slug,$public){
+    $html=bp_cached('html:blog:v5:'.$slug,function()use($slug,$public){
     $db=bp_db();ob_start();
 if($slug!==''){
     $post=bp_post($db,$slug);

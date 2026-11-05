@@ -182,7 +182,7 @@ function bp_multiple_files(array $files): array {
     foreach($files['name'] as $i=>$name)$out[]=['name'=>$name,'tmp_name'=>$files['tmp_name'][$i],'error'=>$files['error'][$i],'size'=>$files['size'][$i]];return $out;
 }
 function bp_page_start(string $title,string $description,string $canonical='/blog/',array $seo=[]): void {
-    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'.bp_seo_tags($title,$description,$canonical,$seo).'<link rel="icon" href="/assets/images/favicon.svg"><link rel="stylesheet" href="/assets/css/site.css?v=3"><link rel="stylesheet" href="/assets/css/blog.css"><script defer src="/assets/js/site.js?v=3"></script><script type="module" src="/assets/js/media.js?v=2"></script><link rel="stylesheet" href="/assets/css/media.css?v=2"></head><body><a href="#main" class="skip">Skip to content</a><div class="progress" aria-hidden="true"></div>';
+    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'.bp_seo_tags($title,$description,$canonical,$seo).'<link rel="icon" href="/assets/images/favicon.svg"><link rel="stylesheet" href="/assets/css/site.css?v=5"><link rel="stylesheet" href="/assets/css/blog.css"><script defer src="/assets/js/site.js?v=4"></script><script type="module" src="/assets/js/media.js?v=2"></script><link rel="stylesheet" href="/assets/css/media.css?v=2"></head><body><a href="#main" class="skip">Skip to content</a><div class="progress" aria-hidden="true"></div>';
     readfile(__DIR__.'/templates/header.html');
 }
 function bp_page_end(): void {readfile(__DIR__.'/templates/footer.html');}
@@ -211,7 +211,7 @@ function bp_site_values(PDO $db): array {
     $values=[];foreach($db->query('SELECT setting_key,setting_value FROM bp_site_settings')->fetchAll() as $r)$values[$r['setting_key']]=$r['setting_value'];return $values;
 }
 function bp_set_site_value(PDO $db,string $key,string $value): void {
-    if(!in_array($key,array_merge(['profile_asset','resume_asset'],array_keys(bp_site_fields())),true))throw new InvalidArgumentException('Unknown website setting.');
+    if(!in_array($key,array_merge(['profile_asset','resume_asset','ga4_measurement_id','ga4_property_id'],array_keys(bp_site_fields())),true))throw new InvalidArgumentException('Unknown website setting.');
     $q=$db->prepare('SELECT setting_key FROM bp_site_settings WHERE setting_key=?');$q->execute([$key]);
     if($q->fetch()){$q=$db->prepare('UPDATE bp_site_settings SET setting_value=?,updated_at=? WHERE setting_key=?');$q->execute([$value,bp_now(),$key]);}
     else{$q=$db->prepare('INSERT INTO bp_site_settings(setting_key,setting_value,updated_at) VALUES (?,?,?)');$q->execute([$key,$value,bp_now()]);}
@@ -301,8 +301,8 @@ function bp_validate_site_values(array $input): array {
     return $values;
 }
 function bp_public_site_values(): array {
-    return bp_cached('site-public:v3',function(){
-        $v=[];foreach(bp_site_fields() as $key=>$field)$v[$key]=$field[1];
+    return bp_cached('site-public:v4',function(){
+        $v=['ga4_measurement_id'=>''];foreach(bp_site_fields() as $key=>$field)$v[$key]=$field[1];
         if(bp_configured())foreach(bp_site_values(bp_db()) as $key=>$value)if(array_key_exists($key,$v))$v[$key]=$value;
         return $v;
     });

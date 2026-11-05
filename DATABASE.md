@@ -68,3 +68,11 @@ Run the collector from cPanel Cron Jobs with the domain’s PHP CLI. For the ini
 Schedule the collector every 15 minutes. Add `--mail` once the account’s outgoing relay is verified. The collector can send yesterday’s report once both archives have been imported after midnight in India. Archive updates determine when a complete report can be sent. Use `--send-date=YYYY-MM-DD` for a one-time delivery check on a completed imported day. The dashboard distinguishes mail accepted by the relay from inbox delivery.
 
 Keep `traffic-state/` outside the document root and preserve its visitor key during releases. The dashboard stores no raw request IPs, user agents or referral URLs. Reports estimate unique visitors and bot clients per India calendar day. Requests that Cloudflare handles entirely at its edge are outside this data source.
+
+### Google Analytics 4
+
+The authenticated **Traffic reports** page accepts a public web-stream measurement ID and a numeric property ID. Use a dedicated property for `bkpandey.com` with the reporting time zone set to India. Turn off Enhanced Measurement if only portfolio page views are needed. The tag is loaded on public content pages only after a visitor chooses to allow analytics. The footer lets visitors revoke the choice.
+
+For admin reporting, enable Google Analytics Data API in a Google Cloud project. Use a dedicated service account with no project roles and grant it **Viewer** on the portfolio’s Analytics property. Place the account’s JSON key in `/home/bkpandey/bkpandey-private/ga4-credentials.json` with mode `0600`. Keep it out of Git, public folders, release archives, and messages. The backend requests only the `analytics.readonly` scope and caches aggregate reports for one hour. Replace the key privately if it is rotated.
+
+With the connection configured, the existing daily traffic email includes a GA4 section. A temporary Google API error does not stop the server-log report. Google can revise recent totals as it processes events. The dashboard keeps Google metrics separate from server-log figures.

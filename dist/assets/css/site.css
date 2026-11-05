@@ -14,3 +14,8 @@
 html:has(#contact:target){scroll-behavior:auto}
 #contact-retry[hidden]{display:none}
 .contact-profile-link{overflow-wrap:anywhere}
+
+.analytics-preferences{position:fixed;z-index:1000;inset:auto 1rem 1rem auto;max-width:min(30rem,calc(100% - 2rem));padding:1rem;background:#141715;border:1px solid #8a9985;border-radius:1rem;color:#fff;box-shadow:0 8px 32px #0006}
+.analytics-preferences[hidden]{display:none}
+.analytics-preferences p{margin:0 0 .75rem}
+.analytics-preferences .btn{margin:0 .5rem .25rem 0}

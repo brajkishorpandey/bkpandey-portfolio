@@ -63,3 +63,5 @@ try {
     <?php endif; ?>
     <p class="muted">Visitor counts use daily, keyed estimates. Automated traffic is identified from user agents. Cloudflare requests served or blocked at the edge are outside this report.</p>
 </section>
+
+<?php require __DIR__.'/ga4-editor.php'; ?>

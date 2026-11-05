@@ -13,3 +13,4 @@ __pycache__/
 *.pyc
 
 node_modules/
+hosting/bkpandey-private/ga4-credentials.json

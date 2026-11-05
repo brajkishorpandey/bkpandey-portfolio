@@ -6,6 +6,7 @@ if (PHP_SAPI !== 'cli') {
 }
 require __DIR__.'/core.php';
 require __DIR__.'/traffic.php';
+require __DIR__.'/ga4.php';
 require __DIR__.'/migration-runner.php';
 
 function bp_traffic_collect_archive(PDO $db, string $path, string $key): int {
@@ -133,7 +134,23 @@ function bp_traffic_mail(PDO $db, string $day): void {
         'MIME-Version' => '1.0',
         'Content-Type' => 'text/plain; charset=UTF-8',
     ];
-    $accepted = mail($recipient, 'bkpandey.com traffic report '.$day, bp_traffic_digest($report), $headers, '-fcontact@bkpandey.com');
+    $digest = bp_traffic_digest($report);
+    $settings = bp_site_values($db);
+    $property = bp_ga4_property_id($settings['ga4_property_id'] ?? '');
+    $measurement = bp_ga4_measurement_id($settings['ga4_measurement_id'] ?? '');
+    if ($measurement !== '' && $property !== '' && is_readable(bp_ga4_credentials_path())) {
+        $digest .= "\n\nGoogle Analytics 4 for ".$day."\n";
+        try {
+            $gaReport = bp_ga4_report($property, $day);
+            foreach (BP_GA4_METRICS as $key => $label) {
+                $digest .= $label.': '.number_format($gaReport['metrics'][$key])."\n";
+            }
+            $digest .= $gaReport['has_rows'] ? 'Recent Google data can still change.' : 'Google returned no activity for this date yet.';
+        } catch (Throwable $e) {
+            $digest .= 'The Google report was unavailable at send time. See Traffic reports in the admin dashboard.';
+        }
+    }
+    $accepted = mail($recipient, 'bkpandey.com traffic report '.$day, $digest, $headers, '-fcontact@bkpandey.com');
     $query = $db->prepare('UPDATE bp_traffic_daily SET mail_status=? WHERE day=?');
     $query->execute([$accepted ? 'queued' : 'failed', $day]);
 }

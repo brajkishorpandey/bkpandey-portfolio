@@ -21,6 +21,9 @@ let settings={contact_email:'brajkishorpandey@gmail.com',email_subject:'Portfoli
 const applyLines=(el,text)=>{if(!el||!text)return;el.replaceChildren(...text.split('\n').flatMap((line,i)=>i?[document.createElement('br'),document.createTextNode(line)]:[document.createTextNode(line)]));};
 const settingsReady=fetch('/api/site-settings',{credentials:'omit',cache:'no-cache'}).then(r=>r.ok?r.json():Promise.reject()).then(values=>{
  settings={...settings,...values};
+ if(/^G-[A-Z0-9]{4,20}$/.test(settings.ga4_measurement_id || '')){
+  import('/assets/js/analytics.js?v=1').then(({setupAnalytics})=>setupAnalytics(settings.ga4_measurement_id)).catch(()=>{});
+ }
  const email=settings.contact_email;
  document.querySelectorAll('a[href^="mailto:"]').forEach(a=>{a.href='mailto:'+encodeURIComponent(email);if(a.textContent.includes('brajkishorpandey@gmail.com'))a.textContent=email+(a.classList.contains('contact-email')?' ↗':'');});
  document.querySelectorAll('a[href^="tel:"]').forEach(a=>{a.href='tel:'+settings.contact_phone.replace(/[^+0-9]/g,'');a.textContent=settings.contact_phone;});

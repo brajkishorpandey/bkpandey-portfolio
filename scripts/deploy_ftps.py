@@ -3,7 +3,7 @@ from pathlib import Path, PurePosixPath
 from ftplib import FTP_TLS, error_perm
 import hashlib, io, json, os, ssl, sys, uuid
 ROOT=Path(__file__).resolve().parents[1]
-PROTECTED={'database.php','setup-attempts.json','cache','uploads','releases','deploy-state.json','contact-config.json','contact-state','traffic-state'}
+PROTECTED={'database.php','setup-attempts.json','cache','uploads','releases','deploy-state.json','contact-config.json','contact-state','traffic-state','ga4-credentials.json'}
 def release_files(root=ROOT):
     result={}
     for base,prefix in [(root/'dist','public_html'),(root/'hosting/public_html','public_html'),(root/'hosting/bkpandey-private','bkpandey-private')]:

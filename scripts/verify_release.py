@@ -24,5 +24,5 @@ for html in (root/'dist').rglob('*.html'):Links().feed(html.read_text())
 if errors:raise SystemExit('Missing local assets: '+', '.join(sorted(set(errors))))
 if 'portrait-fallback' in (root/'dist/index.html').read_text():raise SystemExit('Homepage portrait is missing.')
 for path in files:
- if any(part in {'cache','uploads','database.php','setup-attempts.json','contact-config.json','contact-state'} or part.startswith('contact-config-') for part in Path(path).parts):raise SystemExit('Private runtime file in release.')
+ if any(part in {'cache','uploads','database.php','setup-attempts.json','contact-config.json','contact-state','traffic-state','ga4-credentials.json'} or part.startswith('contact-config-') for part in Path(path).parts):raise SystemExit('Private runtime file in release.')
 print(f'Validated local links and {len(files)} deployable files; runtime secrets excluded.')
